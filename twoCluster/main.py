@@ -29,19 +29,20 @@ def run_animation(all_sheep, sheep_dict, shepherd):
     target = np.array([560, 560])
     sheep_view_distance = 200
     repulsion_distance = 12
-    speed = 1
+    speed = 2
     N = len(all_sheep)
     radius = N + 36
+    last_vector = np.zeros((N, 2), dtype=np.float32)
     global_mean = np.array([np.mean(all_sheep[:, 0]), np.mean(all_sheep[:, 1])])
     while True:
         if shepherdR.check(all_sheep, global_mean, radius):
             all_sheep, global_mean, shepherd = shepherdR.driving(shepherd, all_sheep, global_mean,
                                                                      sheep_view_distance,
-                                                                     repulsion_distance, speed, sheep_dict, target)
+                                                                     repulsion_distance, speed, sheep_dict, target, last_vector)
         else:
             all_sheep, global_mean, shepherd = shepherdR.collecting(shepherd, all_sheep, global_mean,
                                                                          sheep_view_distance,
-                                                                         repulsion_distance, speed, sheep_dict, target)
+                                                                         repulsion_distance, speed, sheep_dict, target, last_vector)
         if shepherdR.all_sheeps_in(all_sheep) or step > 8000:
             break
         tk.update()
@@ -52,8 +53,8 @@ def run_animation(all_sheep, sheep_dict, shepherd):
 
 if __name__ == '__main__':
     tk, canvas = tkinterGUI.init_tkinter()
-    N = 40
+    N = 30
     all_sheep, sheep_dict, shepherd = init_sheep(canvas, N)
     step = run_animation(all_sheep, sheep_dict, shepherd)
-    print("animation over!")
+    print("animation over!", step)
     tk.mainloop()

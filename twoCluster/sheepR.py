@@ -2,13 +2,13 @@ import numpy as np
 
 
 def sheeps_move(shepherd_position, all_sheep,
-                sheep_view_distance, repulsion_distance, speed, sheep_dict):
+                sheep_view_distance, repulsion_distance, speed, sheep_dict, last_vector):
     """
     羊根据牧羊犬的位置的移动情况,如果两者之间的距离大于视野距离，则羊只进行简单的随机运动，
     否则牧羊犬会受到五个不同方向的线性合力，作为下一次位置的计算方法
     """
     n = len(all_sheep)
-    stepmoves = last = np.zeros((n, 2), dtype=np.float32)
+    new_position = np.zeros((n, 2), dtype=np.float32)
     for i in range(n):
         point = sheep_dict['sheep' + str(i)].position2point()
         ps_dist = np.linalg.norm(point - shepherd_position)
@@ -16,24 +16,24 @@ def sheeps_move(shepherd_position, all_sheep,
         if ps_dist > sheep_view_distance:
             H = np.random.uniform(-1, 1, size=2)  # H为-1到1随机运动的大小
             H = H / np.linalg.norm(H)  # 把数据归一化
-            H = 0.5 * last[i] + 2 * ra + 1.5 * H
+            H = 0.15 * last_vector[i] + 2 * ra + 1.5 * H
             H = H / np.linalg.norm(H)
-            last[i] = H
         else:
             rs = (point - shepherd_position) / ps_dist
             C = (l_mean - point) / np.linalg.norm(l_mean - point)
             e = np.random.uniform(-1, 1, size=2)
-            H = 0.5 * last[i] + 1.05 * C + rs + 2 * ra + 0.3 * e / np.linalg.norm(e)
+            H = 0.15 * last_vector[i] + 1.05 * C + rs + 2 * ra + 0.3 * e / np.linalg.norm(e)
             H = H / np.linalg.norm(H)
-            last[i] = H
             H = H * speed
+
+        last_vector[i] = H
         sheep_dict['sheep' + str(i)].x = H[0]
         sheep_dict['sheep' + str(i)].y = H[1]
         sheep_dict['sheep' + str(i)].draw()
-        stepmoves[i] = H
+        new_position[i] = H
     for i in range(n):
         point = sheep_dict['sheep' + str(i)].position2point()
-        all_sheep[i] = stepmoves[i] + point
+        all_sheep[i] = new_position[i] + point
 
     return all_sheep
 

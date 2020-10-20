@@ -4,7 +4,7 @@ import math
 
 
 def collecting(shepherd, all_sheep, global_mean, sheep_view_distance,
-               repulsion_distance, speed, sheep_dict, target):
+               repulsion_distance, speed, sheep_dict, target, last_vector):
     """
     把远离中心的羊聚集起来
     最大角度 + KNN
@@ -16,7 +16,7 @@ def collecting(shepherd, all_sheep, global_mean, sheep_view_distance,
     index = rotate(shepherd_position, global_mean, target, all_sheep)
     far = sheep_dict['sheep' + str(index)].position2point()
     all_sheep = sheepR.sheeps_move(shepherd_position, all_sheep, sheep_view_distance,
-                                       repulsion_distance, speed,  sheep_dict)
+                                       repulsion_distance, speed,  sheep_dict, last_vector)
     gt_dist = np.linalg.norm(far - global_mean)
     pc = (far - global_mean) / gt_dist * 65 + far
     rd = (pc - shepherd_position) / np.linalg.norm(pc - shepherd_position) * speeds
@@ -27,14 +27,15 @@ def collecting(shepherd, all_sheep, global_mean, sheep_view_distance,
     return all_sheep, global_mean, shepherd
 
 
-def driving(shepherd, all_sheep, global_mean, sheep_view_distance, repulsion_distance, speed, sheep_dict, target):
+def driving(shepherd, all_sheep, global_mean, sheep_view_distance,
+            repulsion_distance, speed, sheep_dict, target, last_vector):
     """
     把羊往目标点驱赶
     """
     speeds = speed * 1.5
     shepherd_position = shepherd.position2point()
     all_sheep = sheepR.sheeps_move(shepherd_position, all_sheep, sheep_view_distance,
-                                   repulsion_distance, speed, sheep_dict)
+                                   repulsion_distance, speed, sheep_dict, last_vector)
     gt_dist = np.linalg.norm(target - global_mean)
     Pd = (global_mean - target) / gt_dist * 65 + global_mean
     rd = (Pd - shepherd_position) / np.linalg.norm(Pd - shepherd_position) * speeds
