@@ -1,8 +1,8 @@
-from twoCluster import tkinterGUI
-from twoCluster import sheep
+from twoClusterDistance import tkinterGUI
+from twoClusterDistance import sheep
 import numpy as np
 import time
-from twoCluster import shepherdR
+from twoClusterDistance import shepherdR
 
 
 def init_sheep(canvas_local, N):
