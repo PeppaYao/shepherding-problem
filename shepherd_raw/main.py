@@ -1,8 +1,8 @@
-from shepherd import tkinterGUI
-from shepherd import agent
+from shepherd_raw import tkinterGUI
+from shepherd_raw import agent
 import numpy as np
 import time
-from shepherd import shepherdRules
+from shepherd_raw import shepherdRules
 
 
 def init_sheep(canvas, N):

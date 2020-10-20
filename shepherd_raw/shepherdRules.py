@@ -1,5 +1,5 @@
 import numpy as np
-from shepherd import sheepRules
+from shepherd_raw import sheepRules
 import math
 
 
