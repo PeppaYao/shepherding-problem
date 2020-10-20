@@ -10,19 +10,21 @@ def sheeps_move(shepherd_position, all_sheep,
     n = len(all_sheep)
     new_position = np.zeros((n, 2), dtype=np.float32)
     for i in range(n):
-        point = sheep_dict['sheep' + str(i)].position2point()
-        ps_dist = np.linalg.norm(point - shepherd_position)
-        l_mean, ra = knn(point, all_sheep, n//2+5, repulsion_distance)
+        per_sheep = sheep_dict['sheep' + str(i)].position2point()
+        ps_dist = np.linalg.norm(per_sheep - shepherd_position)
+
+        l_mean = get_local_attractive(per_sheep, all_sheep, sheep_view_distance)
+        ra = get_sheep_repulsion_to_neighbor(per_sheep, all_sheep, repulsion_distance)
         if ps_dist > sheep_view_distance:
             H = np.random.uniform(-1, 1, size=2)  # H为-1到1随机运动的大小
             H = H / np.linalg.norm(H)  # 把数据归一化
-            H = 0.1 * last_vector[i] + 2 * ra + 1.5 * H
+            H = 0.1 * last_vector[i] + 0.8 * ra + 0.3 * H
             H = H / np.linalg.norm(H)
         else:
-            rs = (point - shepherd_position) / ps_dist
-            C = (l_mean - point) / np.linalg.norm(l_mean - point)
+            rs = (per_sheep - shepherd_position) / ps_dist
+            C = (l_mean - per_sheep) / np.linalg.norm(l_mean - per_sheep)
             e = np.random.uniform(-1, 1, size=2)
-            H = 0.1 * last_vector[i] + 1.05 * C + rs + 2 * ra + 0.3 * e / np.linalg.norm(e)
+            H = 0.1 * last_vector[i] + 1.05 * C + rs + 0.8 * ra + 0.3 * e / np.linalg.norm(e)
             H = H / np.linalg.norm(H)
             H = H * speed
 
@@ -32,8 +34,8 @@ def sheeps_move(shepherd_position, all_sheep,
         sheep_dict['sheep' + str(i)].draw()
         new_position[i] = H
     for i in range(n):
-        point = sheep_dict['sheep' + str(i)].position2point()
-        all_sheep[i] = new_position[i] + point
+        per_sheep = sheep_dict['sheep' + str(i)].position2point()
+        all_sheep[i] = new_position[i] + per_sheep
 
     return all_sheep
 
@@ -56,7 +58,7 @@ def get_sheep_repulsion_to_neighbor(cur_sheep, all_sheep, repulsion_dist):
     """
     dist = [np.linalg.norm(sheep - cur_sheep) for sheep in all_sheep]
     repulsion = np.zeros(2, dtype=np.float32)
-    for i in range(1, len(all_sheep)):
+    for i in range(0, len(all_sheep)):
         d = np.linalg.norm(cur_sheep - all_sheep[i])
         if dist[i] <= repulsion_dist and d != 0:
             repulsion += (cur_sheep - all_sheep[i]) / d

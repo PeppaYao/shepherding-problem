@@ -1,5 +1,5 @@
 import numpy as np
-from twoCluster import sheepR
+from twoClusterView import sheepR
 import math
 
 
@@ -7,7 +7,7 @@ def collecting(shepherd, all_sheep, global_mean, sheep_view_distance,
                repulsion_distance, speed, sheep_dict, target, last_vector):
     """
     把远离中心的羊聚集起来
-    方向性最大角度 + KNN
+    随机最大角度 + view
     首先找到最大角度的羊，获取到这只羊的位置。
     根据牧羊犬当前的位置，计算羊群下一个时间步的位置，返回一个最新的羊群位置。
     """
@@ -46,15 +46,29 @@ def driving(shepherd, all_sheep, global_mean, sheep_view_distance,
     return all_sheep, global_mean, shepherd
 
 
-def find_max_angle_sheep(p, center, all_sheep):
-    """找到最大角度的羊，作为目标点"""
-    d = [math.sqrt(np.sum((x - p) ** 2)) for x in all_sheep]
-    dx = math.sqrt(np.sum((center - p) ** 2))
-    OA = center - p
-    OB = all_sheep - p
-    m = len(all_sheep)
-    t = [OA.dot(OB[i, :]) / dx / d[i] for i in range(m)]
-    return np.argmin(t)
+def get_local_attractive(cur_sheep, all_sheep, sheep_view_dist):
+    """
+    sheep_view_dist,然后以该羊为圆心，寻找整个羊群中在该羊形成的Rs的圆内的圆心
+    """
+    dist = [np.linalg.norm(sheep - cur_sheep) for sheep in all_sheep]
+    neighbor_sheep = np.array([all_sheep[i] for i in range(0, len(all_sheep)) if dist[i] < sheep_view_dist and dist[i] != 0])
+    local_center = np.zeros(2)
+    if len(neighbor_sheep) > 0:
+        local_center = np.array([np.mean(neighbor_sheep[:, 0]), np.mean(neighbor_sheep[:, 1])])
+    return local_center
+
+
+def get_sheep_repulsion_to_neighbor(cur_sheep, all_sheep, repulsion_dist):
+    """
+    获取羊内部距离过近的排斥力，当两只羊之间的距离小于repulsion_dist时产生一个作用力
+    """
+    dist = [np.linalg.norm(sheep - cur_sheep) for sheep in all_sheep]
+    repulsion = np.zeros(2, dtype=np.float32)
+    for i in range(1, len(all_sheep)):
+        d = np.linalg.norm(cur_sheep - all_sheep[i])
+        if dist[i] <= repulsion_dist and d != 0:
+            repulsion += (cur_sheep - all_sheep[i]) / d
+    return repulsion
 
 
 def check(all_sheep, global_mean, radius):
@@ -78,9 +92,6 @@ def rotate(cen, center, target, X):
     先计算羊的点是否在中心点的左边，若不是则cos(t)设置为1
     由于要找出最大的角度[0,90]范围内，cos(t)值越小，角度越大
     """
-    res = [np.cross((x - cen), (center - cen)) for x in X]
-    direct = np.cross((target - cen), (center - cen))
-
     d = [math.sqrt(np.sum((x - cen) ** 2)) for x in X]
     dx = math.sqrt(np.sum((center - cen) ** 2))
     OA = center - cen
@@ -88,10 +99,4 @@ def rotate(cen, center, target, X):
 
     m = len(X)
     T = [OA.dot(OB[i, :]) / dx / d[i] for i in range(m)]
-    for i in range(m):
-        if int(direct) ^ int(res[i]):
-            continue
-        else:
-            T[i] = 1
-
     return np.argmin(T)
