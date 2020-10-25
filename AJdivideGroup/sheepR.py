@@ -17,13 +17,13 @@ def sheeps_move(herd_a_pos, all_sheep, R_dist, R_rep, speed, sheep_dict, last_ve
         if ps_dist > R_dist:
             H = np.random.uniform(-1, 1, size=2)  # H为-1到1随机运动的大小
             H = H / np.linalg.norm(H)  # 把数据归一化
-            H = 0.1 * last_vector[i] + 1.2 * ra + 0.3 * H
+            H = 0.1 * last_vector[i] + 1.5 * ra + 0.3 * H
             H = H / np.linalg.norm(H)
         else:
             rs = (per_sheep - herd_a_pos) / ps_dist
             C = (l_mean - per_sheep) / np.linalg.norm(l_mean - per_sheep)
             e = np.random.uniform(-1, 1, size=2)
-            H = 0.1 * last_vector[i] + 1.05 * C + rs + 1.2 * ra + 0.3 * e / np.linalg.norm(e)
+            H = 0.1 * last_vector[i] + 1.05 * C + rs + 1.5 * ra + 0.3 * e / np.linalg.norm(e)
             H = H / np.linalg.norm(H)
             H = H * speed
 
