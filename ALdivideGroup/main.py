@@ -1,15 +1,15 @@
-from AKdivideGroupOne import tkinterGUI
-from AKdivideGroupOne import sheep
+from ALdivideGroup import tkinterGUI
+from ALdivideGroup import sheep
 import numpy as np
 import time
-from AKdivideGroupOne import shepherdR
+from ALdivideGroup import shepherdR
 
 
-def init_sheep(canvas_local, n):
+def init_sheep(canvas_local, N):
     agents = {}
     colors = ['green', 'blue', 'yellow', 'orange', 'pink', 'purple']
     X = list()
-    for i in range(n):
+    for i in range(N):
         np.random.seed(i)
         x = np.random.randint(50, 500)
         y = np.random.randint(50, 500)
