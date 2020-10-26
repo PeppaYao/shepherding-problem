@@ -74,17 +74,21 @@ def is_all_in_target(my_sheep):
     return True
 
 
-def rotate(cen, center, target, X):
+def get_green_proportion(all_sheep, green_index):
     """
-    传过来的是牧羊犬的位置和中心坐标的位置
-    先计算羊的点是否在中心点的左边，若不是则cos(t)设置为1
-    由于要找出最大的角度[0,90]范围内，cos(t)值越小，角度越大
+    :param all_sheep: all sheep postion
+    :param green_index: green sheep index
+    :return: proportion of green sheep in target area
     """
-    d = [math.sqrt(np.sum((x - cen) ** 2)) for x in X]
-    dx = math.sqrt(np.sum((center - cen) ** 2))
-    OA = center - cen
-    OB = X - cen
+    green_count = 0
+    other_count = 0
+    n = len(all_sheep)
+    for i in range(n):
+        sheep = all_sheep[i]
+        if sheep[0] >= 455 and sheep[1] >= 455:
+            if i in green_index:
+                green_count += 1
+            else:
+                other_count += 1
 
-    m = len(X)
-    T = [OA.dot(OB[i, :]) / dx / d[i] for i in range(m)]
-    return np.argmin(T)
+    return green_count, other_count

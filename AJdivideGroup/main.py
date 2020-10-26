@@ -44,8 +44,8 @@ def run_animation(all_sheep, sheep_dict, herd, green_index):
 
         green_array = all_sheep[green_index]
         if shepherdR.is_all_in_target(green_array) or step > 4000:
-            proportion = shepherdR.get_green_proportion(all_sheep, green_index)
-            print("proportion of green sheep: ", proportion)
+            green, blue = shepherdR.get_green_proportion(all_sheep, green_index)
+            print("proportion of green sheep: ", green / (green + blue))
             for per_sheep in sheep_dict.values():
                 per_sheep.delete()
             herd.delete()
@@ -54,7 +54,7 @@ def run_animation(all_sheep, sheep_dict, herd, green_index):
         tk.update()
         time.sleep(0.01)
         step += 1
-    return step, proportion
+    return step, green, blue
 
 
 def print_list(lists):
@@ -72,13 +72,16 @@ def print_list(lists):
 if __name__ == '__main__':
     tk, canvas = tkinterGUI.init_tkinter()
     steps = []
-    proportions = []
-    for n in range(10, 60, 2):
+    greens = []
+    blues = []
+    for n in range(10, 62, 2):
         all_sheep, sheep_dict, shepherd_a, green_index = init_sheep(canvas, n)
-        step, proportion = run_animation(all_sheep, sheep_dict, shepherd_a, green_index)
+        step, green, blue = run_animation(all_sheep, sheep_dict, shepherd_a, green_index)
         steps.append(step)
-        proportions.append(proportion)
+        greens.append(green)
+        blues.append(blue)
     print("animation over!")
     print_list(steps)
-    print_list(proportions)
+    print_list(greens)
+    print_list(blues)
     tk.mainloop()

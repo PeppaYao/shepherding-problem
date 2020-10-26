@@ -95,4 +95,4 @@ def get_green_proportion(all_sheep, green_index):
             else:
                 other_count += 1
 
-    return float(green_count)/(green_count + other_count)
+    return green_count, other_count
