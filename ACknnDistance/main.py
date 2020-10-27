@@ -1,8 +1,8 @@
-from AFviewDistance import tkinterGUI
-from AFviewDistance import sheep
+from ACknnDistance import tkinterGUI
+from ACknnDistance import sheep
 import numpy as np
 import time
-from AFviewDistance import shepherdR
+from ACknnDistance import shepherdR
 
 
 def init_sheep(canvas_local, n):

@@ -1,5 +1,5 @@
 from ADshepherd_raw import tkinterGUI
-from ADshepherd_raw import agent
+from ADshepherd_raw import sheep
 import numpy as np
 import time
 from ADshepherd_raw import shepherdRules
@@ -13,14 +13,14 @@ def init_sheep(canvas, N):
         if i % 2 == 0:
             x = np.random.randint(10, 590)
             y = np.random.randint(10, 590)
-            agents['sheep' + str(i)] = agent.Agent(canvas, x - 5, y - 5, x + 5, y + 5, 'green', 'oval')  # 绿色
+            agents['sheep' + str(i)] = sheep.Agent(canvas, x - 5, y - 5, x + 5, y + 5, 'green', 'oval')  # 绿色
             X.append([x, y])
         else:
             x = np.random.randint(10, 590)
             y = np.random.randint(10, 590)
-            agents['sheep' + str(i)] = agent.Agent(canvas, x - 5, y - 5, x + 5, y + 5, 'blue', 'rectangle')  # 蓝色
+            agents['sheep' + str(i)] = sheep.Agent(canvas, x - 5, y - 5, x + 5, y + 5, 'blue', 'rectangle')  # 蓝色
             X.append([x, y])
-    shepherd = agent.Agent(canvas, 560, 560, 560 + 10, 560 + 10, 'red', 'oval')
+    shepherd = sheep.Agent(canvas, 560, 560, 560 + 10, 560 + 10, 'red', 'oval')
     shepherd_point = shepherd.position2point()
     return np.array(X), agents, shepherd_point
 
@@ -43,7 +43,7 @@ def run_animation(all_sheep, sheep_dict, shepherd, target):
 
 if __name__ == '__main__':
     tk, canvas = tkinterGUI.init_tkinter()
-    N = 46
+    N = 20
     all_sheep, sheep_dict, shepherd = init_sheep(canvas, N)
     step = run_animation(all_sheep, sheep_dict, shepherd)
     print("animation over!", step)

@@ -244,7 +244,7 @@ def collecting(herd, g_sh_array, g_g_mean, k, b_sh_array, all_sheep):
         sheeps['sheep' + str(i)].draw()
         all_sheep[i] = H + per_sh_point
 
-    # calculate ACshepherd next position
+    # calculate ACknnDistance next position
     Pc = (far - g_g_mean) / LA.norm(far - g_g_mean) * 65 + far
     rd = (Pc - herd) / LA.norm(Pc - herd) * speed_of_herd
     shepherd.x = rd[0]

@@ -38,20 +38,3 @@ class Agent:
         """"返回目标当前的位置"""
         pos = self.canvas.coords(self.id)
         return pos
-
-    def draw(self):
-        """绘制目标对象的运动状态"""
-        if self.tag:
-            pos = self.canvas.coords(self.id)
-            if pos[0] <= 0:
-                self.x = 10
-            if pos[1] <= 0:
-                self.y = 10
-            if pos[2] > self.canvas_width:
-                self.x = -10
-            if pos[3] > self.canvas_height:
-                self.y = -10
-        else:
-            self.x = 0
-            self.y = 0
-        self.canvas.move(self.id, self.x, self.y)
