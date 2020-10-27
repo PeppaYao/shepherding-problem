@@ -21,7 +21,7 @@ def sheep_move(herd_a_pos, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vec
             rs = (per_sheep - herd_a_pos) / ps_dist
             C = (l_mean - per_sheep) / la.norm(l_mean - per_sheep)
             e = np.random.uniform(-1, 1, size=2)
-            H = 0.1 * last_vector[i] + 1.05 * C + rs + 0 * ra + 0.3 * e / la.norm(e)
+            H = 0.1 * last_vector[i] + 1.05 * C + 1.4 * rs + 1.5 * ra + 0.3 * e / la.norm(e)
             H = H / la.norm(H)
             H = H * speed
 
@@ -46,10 +46,11 @@ def get_local_attractive(cur_sheep, all_sheep, r_dist):
 
 
 def get_sheep_repulsion(cur_sheep, all_sheep, r_rep):
-    dist = [np.linalg.norm(sheep - cur_sheep) for sheep in all_sheep]
+    dist = [la.norm(sheep - cur_sheep) for sheep in all_sheep]
     repulsion = np.zeros(2, dtype=np.float32)
-    for i in range(1, len(all_sheep)):
-        d = np.linalg.norm(cur_sheep - all_sheep[i])
-        if dist[i] <= r_rep and d != 0:
+    n = len(all_sheep)
+    for i in range(n):
+        d = la.norm(cur_sheep - all_sheep[i])
+        if dist[i] <= r_rep and d > 1:
             repulsion += (cur_sheep - all_sheep[i]) / d
     return repulsion
