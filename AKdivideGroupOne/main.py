@@ -74,7 +74,7 @@ if __name__ == '__main__':
     steps = []
     greens = []
     blues = []
-    for n in range(10, 62, 2):
+    for n in range(30, 32, 2):
         all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
         step, green, blue = run_animation(all_sheep, sheep_dict, shepherd_a)
         steps.append(step)

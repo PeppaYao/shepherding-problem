@@ -28,7 +28,7 @@ def sheeps_move(herd_a_pos, all_sheep, r_dist, r_rep, speed, sheep_dict, last_ve
             rs = (per_sheep - herd_a_pos) / ps_dist
             C = (l_mean - per_sheep) / np.linalg.norm(l_mean - per_sheep)
             e = np.random.uniform(-1, 1, size=2)
-            H = 0.5 * last_vector[i] + 1.05 * C + rs + 2 * ra + 0.3 * e / np.linalg.norm(e)
+            H = 0.5 * last_vector[i] + 5 * C + rs + 2 * ra + 0.3 * e / np.linalg.norm(e)
             H = H / np.linalg.norm(H)
             H = H * speed
 

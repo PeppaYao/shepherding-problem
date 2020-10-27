@@ -1,45 +1,46 @@
 from AFviewDistance import tkinterGUI
-from AFviewDistance import agent
+from AFviewDistance import sheep
 import numpy as np
 import time
-from AFviewDistance import shepherdRules
+from AFviewDistance import shepherdR
 
 
-def init_sheep(canvas, N):
+def init_sheep(canvas_local, n):
     agents = {}
     X = list()
-    for i in range(N):
+    for i in range(n):
         np.random.seed(i)
         x = np.random.randint(50, 500)
         y = np.random.randint(50, 500)
         X.append([x, y])
-        agents['sheep' + str(i)] = agent.Agent(canvas, x - 5, y - 5, x + 5, y + 5, 'green', 'oval')
+        agents['sheep' + str(i)] = sheep.Agent(canvas_local, x - 5, y - 5, x + 5, y + 5, 'green')
 
-    shepherd = agent.Agent(canvas, 590, 590, 600, 600, 'red', 'oval')
+    herd = sheep.Agent(canvas_local, 550, 550, 560, 560, 'red')
+    return np.array(X), agents, herd
 
-    return np.array(X), agents, shepherd
 
-
-def run_animation(all_sheep, sheep_dict, shepherd):
+def run_animation(all_sheep, sheep_dict, herd):
     step = 0
     target = np.array([560, 560])
-    sheep_view_distance = 300
-    repulsion_distance = 14
-    speed = 1.5
-    N = len(all_sheep)
-    radius = N + 36
-    global_mean = np.array([np.mean(all_sheep[:, 0]), np.mean(all_sheep[:, 1])])
+    r_dist = 300
+    r_rep = 14
+    speed = 2
+    n = len(all_sheep)
+    last_vector = np.zeros((n, 2), dtype=np.float32)
     while True:
-        if shepherdRules.check(all_sheep, global_mean, radius):
-            all_sheep, global_mean, shepherd = shepherdRules.driving(shepherd, all_sheep, global_mean,
-                                                                     sheep_view_distance,
-                                                                     repulsion_distance, speed, sheep_dict, target)
+        if shepherdR.check(all_sheep):
+            print("driving...")
+            shepherdR.driving(herd, all_sheep, r_dist, r_rep, speed, sheep_dict, target, last_vector)
         else:
-            all_sheep, global_mean, shepherd, = shepherdRules.collecting(shepherd, all_sheep, global_mean,
-                                                                         sheep_view_distance,
-                                                                         repulsion_distance, speed, sheep_dict)
-        if shepherdRules.all_sheeps_in(all_sheep) or step > 8000:
+            print("collecting...")
+            shepherdR.collecting(herd, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector)
+
+        if shepherdR.is_all_in_target(all_sheep) or step > 4000:
+            for per_sheep in sheep_dict.values():
+                per_sheep.delete()
+            herd.delete()
             break
+
         tk.update()
         time.sleep(0.01)
         step += 1
@@ -48,8 +49,10 @@ def run_animation(all_sheep, sheep_dict, shepherd):
 
 if __name__ == '__main__':
     tk, canvas = tkinterGUI.init_tkinter()
-    N = 20
-    all_sheep, sheep_dict, shepherd= init_sheep(canvas, N)
-    step = run_animation(all_sheep, sheep_dict, shepherd)
-    print("animation over!", step)
+
+    n = 40
+    all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
+    step = run_animation(all_sheep, sheep_dict, shepherd_a)
+    print("animation over!")
+    print(step)
     tk.mainloop()

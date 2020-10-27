@@ -67,12 +67,19 @@ def run_animation(all_sheep, sheep_dict, herd_1, herd_2):
             p = 2
             q = 0
 
-        sheepR.sheep_move(herd_1_point, herd_2_point, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector, p, q)
+        if p == 1 and q == 1:
+            sheepR.sheep_move(herd_1_point, herd_2_point, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector, p, q)
+        elif p == 0:
+            sheepR.sheep_move_2(herd_2_point, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector)
+        elif q == 0:
+            sheepR.sheep_move_2(herd_1_point, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector)
+
         green_array = all_sheep[green_index]
         blue_array = all_sheep[blue_index]
 
         if green_run and shepherdR.is_all_in_target(green_array):
             print("green over")
+            break
             for ind in green_index:
                 sheep_dict['sheep'+str(ind)].status = False
             herd_1.status = False
@@ -80,6 +87,7 @@ def run_animation(all_sheep, sheep_dict, herd_1, herd_2):
 
         if blue_run and shepherdR.is_all_in_target_blue(blue_array):
             print("blue over")
+            break
             for ind in blue_index:
                 sheep_dict['sheep'+str(ind)].status = False
             herd_2.status = False
@@ -107,7 +115,7 @@ def print_list(lists):
 
 if __name__ == '__main__':
     tk, canvas = tkinterGUI.init_tkinter()
-    n = 16
+    n = 20
     all_sheep, sheep_dict, herd_1, herd_2 = init_sheep(canvas, n);
     step = run_animation(all_sheep, sheep_dict, herd_1, herd_2)
     print("animation over!")
