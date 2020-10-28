@@ -1,5 +1,5 @@
 import numpy as np
-from AKdivideGroupOne import sheepR
+from AKknnDistWare import sheepR
 from numpy import linalg as la
 import math
 

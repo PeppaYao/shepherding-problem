@@ -1,12 +1,3 @@
-### 策略说明
-- 一只犬
-- 一类羊
-- 视野距离
-- 最大角度
-### 补充说明
-### 实验结果
-- 时间步数四种模型
-```py
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -29,4 +20,3 @@ plt.legend()
 plt.grid()
 plt.xticks(np.arange(10, 62, 4))
 plt.show()
-```

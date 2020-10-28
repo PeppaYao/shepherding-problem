@@ -1,8 +1,8 @@
-from AKdivideGroupOne import tkinterGUI
-from AKdivideGroupOne import sheep
+from AKknnDistWare import tkinterGUI
+from AKknnDistWare import sheep
 import numpy as np
 import time
-from AKdivideGroupOne import shepherdR
+from AKknnDistWare import shepherdR
 
 
 def init_sheep(canvas_local, n):

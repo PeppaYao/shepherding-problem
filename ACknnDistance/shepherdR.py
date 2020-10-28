@@ -1,15 +1,13 @@
 import numpy as np
-from ACknnDistance import sheepR
 from numpy import linalg as la
 
 
-def collecting(herd, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector):
+def collecting(herd, all_sheep, speed):
     speeds = speed * 1.5
     herd_point = herd.position2point()
 
     g_mean = np.array([np.mean(all_sheep[:, 0]), np.mean(all_sheep[:, 1])])
     far_a = find_farthest_sheep(all_sheep)
-    sheepR.sheep_move(herd_point, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector)
 
     gt_dist_a = la.norm(far_a - g_mean)
     pc_a = (far_a - g_mean) / gt_dist_a * 65 + far_a
@@ -21,11 +19,10 @@ def collecting(herd, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector):
     herd.draw()
 
 
-def driving(herd, all_sheep, r_dist, r_rep, speed, sheep_dict, target, last_vector):
+def driving(herd, all_sheep, speed, target):
     speeds = speed * 1.5
     herd_point = herd.position2point()
     g_mean = np.array([np.mean(all_sheep[:, 0]), np.mean(all_sheep[:, 1])])
-    sheepR.sheep_move(herd_point, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector)
 
     gt_dist = la.norm(target - g_mean)
     Pd = (g_mean - target) / gt_dist * 65 + g_mean
@@ -45,7 +42,7 @@ def find_farthest_sheep(my_sheep):
 
 def check(my_sheep):
     n = len(my_sheep)
-    radius = n + 40
+    radius = n + 50
     global_mean = np.array([np.mean(my_sheep[:, 0]), np.mean(my_sheep[:, 1])])
     d = [la.norm(sheep - global_mean) for sheep in my_sheep]
     D = np.array(d)

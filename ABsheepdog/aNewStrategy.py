@@ -4,7 +4,7 @@ import time
 import math
 
 tk = Tk()
-tk.title('ADshepherd_raw')
+tk.title('ADknnAngle')
 tk.wm_attributes("-topmost", 1)
 Width = 600
 Height = 600

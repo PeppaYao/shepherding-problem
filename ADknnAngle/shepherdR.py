@@ -7,8 +7,7 @@ def collecting(herd, all_sheep, speed):
     herd_point = herd.position2point()
 
     g_mean = np.array([np.mean(all_sheep[:, 0]), np.mean(all_sheep[:, 1])])
-    far_a = find_farthest_sheep(all_sheep)
-
+    far_a = find_max_angle_sheep(herd_point, all_sheep)
     gt_dist_a = la.norm(far_a - g_mean)
     pc_a = (far_a - g_mean) / gt_dist_a * 65 + far_a
     rd_a = (pc_a - herd_point) / la.norm(pc_a - herd_point) * speeds
@@ -32,13 +31,6 @@ def driving(herd, all_sheep, speed, target):
     herd.draw()
 
 
-def find_farthest_sheep(my_sheep):
-
-    global_mean = np.array([np.mean(my_sheep[:, 0]), np.mean(my_sheep[:, 1])])
-    d = [np.linalg.norm(x - global_mean) for x in my_sheep]
-    return my_sheep[np.argmax(d)]
-
-
 def check(my_sheep):
     n = len(my_sheep)
     radius = n + 50
@@ -53,3 +45,15 @@ def is_all_in_target(my_sheep):
         if p[0] < 455 or p[1] < 455:
             return False
     return True
+
+
+def find_max_angle_sheep(herd_point, all_sheep):
+    g_mean = np.array([np.mean(all_sheep[:, 0]), np.mean(all_sheep[:, 1])])
+    d = [la.norm(sheep - herd_point) for sheep in all_sheep]
+    dx = la.norm(g_mean - herd_point)
+    OA = g_mean - herd_point
+    OB = all_sheep - herd_point
+    m = len(all_sheep)
+    t = [OA.dot(OB[i, :]) / dx / d[i] for i in range(m)]
+    far = np.argsort(t)
+    return all_sheep[far[0]]

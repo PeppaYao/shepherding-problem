@@ -1,9 +1,9 @@
-from AFviewDistance import tkinterGUI
-from AFviewDistance import sheep
+from ADknnAngle import tkinterGUI
+from ADknnAngle import sheep
 import numpy as np
 import time
-from AFviewDistance import shepherdR
-from AFviewDistance import sheepR
+from ADknnAngle import shepherdR
+from ADknnAngle import sheepR
 
 
 def init_sheep(canvas_local, n):
@@ -36,11 +36,11 @@ def run_animation(all_sheep, sheep_dict, herd):
         else:
             print("collecting...")
             shepherdR.collecting(herd, all_sheep, speed)
+
         sheepR.sheep_move(herd_point, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector)
 
         tk.update()
         time.sleep(0.01)
-
         if shepherdR.is_all_in_target(all_sheep) or step > 4000:
             for per_sheep in sheep_dict.values():
                 per_sheep.delete()
@@ -64,6 +64,6 @@ if __name__ == '__main__':
         all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
         step = run_animation(all_sheep, sheep_dict, shepherd_a)
         steps.append(step)
-    print("AF animation over!")
+    print("AD animation over!")
     print_list(steps)
     tk.mainloop()

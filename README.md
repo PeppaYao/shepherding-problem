@@ -22,3 +22,12 @@
 ### 羊对群体的感知
 - 羊对自己的组别无感知
 - 羊知道自己的组别
+### 映射表
+- =============================
+- ACknnDistance 基于knn+distance
+- ADknnAngle 基于knn+angle
+- =============================
+- AFviewDistance 基于视距和最远距离
+- =============================
+- AJknnDistUnware 两类羊knn+distance+无意识
+- AKknnDistWare  两类羊knn+distance+有意识

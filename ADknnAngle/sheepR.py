@@ -2,23 +2,23 @@ import numpy as np
 from numpy import linalg as la
 
 
-def sheep_move(herd_a_pos, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector):
+def sheep_move(herd_point, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector):
     n = len(all_sheep)
     new_position = np.zeros((n, 2), dtype=np.float32)
     for i in range(n):
         per_sheep = sheep_dict['sheep' + str(i)].position2point()
-        ps_dist = la.norm(per_sheep - herd_a_pos)
+        ps_dist = la.norm(per_sheep - herd_point)
         l_mean, ra = knn(per_sheep, all_sheep, n // 2 + 5, r_rep)
         if ps_dist > r_dist:
             H = np.random.uniform(-1, 1, size=2)
             H = H / la.norm(H)
-            H = 0.1 * last_vector[i] + 1.2 * ra + 0.3 * H
+            H = 0.1 * last_vector[i] + 1.3 * ra + 0.3 * H
             H = H / la.norm(H)
         else:
-            rs = (per_sheep - herd_a_pos) / ps_dist
+            rs = (per_sheep - herd_point) / ps_dist
             C = (l_mean - per_sheep) / la.norm(l_mean - per_sheep)
             e = np.random.uniform(-1, 1, size=2)
-            H = 0.1 * last_vector[i] + 1.05 * C + 1 * rs + 1.2 * ra + 0.3 * e / la.norm(e)
+            H = 0.1 * last_vector[i] + 1.05 * C + 1 * rs + 1.3 * ra + 0.3 * e / la.norm(e)
             H = H / la.norm(H)
             H = H * speed
 

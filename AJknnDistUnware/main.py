@@ -1,8 +1,8 @@
-from AJdivideGroup import tkinterGUI
-from AJdivideGroup import sheep
+from AJknnDistUnware import tkinterGUI
+from AJknnDistUnware import sheep
 import numpy as np
 import time
-from AJdivideGroup import shepherdR
+from AJknnDistUnware import shepherdR
 
 
 def init_sheep(canvas_local, n):

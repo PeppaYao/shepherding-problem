@@ -1,5 +1,5 @@
 import numpy as np
-from AJdivideGroup import sheepR
+from AJknnDistUnware import sheepR
 import math
 from numpy import linalg as la
 

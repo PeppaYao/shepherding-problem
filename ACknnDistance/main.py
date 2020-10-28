@@ -3,6 +3,7 @@ from ACknnDistance import sheep
 import numpy as np
 import time
 from ACknnDistance import shepherdR
+from ACknnDistance import sheepR
 
 
 def init_sheep(canvas_local, n):
@@ -28,31 +29,41 @@ def run_animation(all_sheep, sheep_dict, herd):
     n = len(all_sheep)
     last_vector = np.zeros((n, 2), dtype=np.float32)
     while True:
+        herd_point = herd.position2point().copy()
         if shepherdR.check(all_sheep):
             print("driving...")
-            shepherdR.driving(herd, all_sheep, r_dist, r_rep, speed, sheep_dict, target, last_vector)
+            shepherdR.driving(herd, all_sheep, speed, target)
         else:
             print("collecting...")
-            shepherdR.collecting(herd, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector)
+            shepherdR.collecting(herd, all_sheep, speed)
+        sheepR.sheep_move(herd_point, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector)
+
+        tk.update()
+        time.sleep(0.01)
 
         if shepherdR.is_all_in_target(all_sheep) or step > 4000:
             for per_sheep in sheep_dict.values():
                 per_sheep.delete()
             herd.delete()
             break
-
-        tk.update()
-        time.sleep(0.01)
         step += 1
     return step
 
 
+def print_list(lists):
+    print("[", end="")
+    for item in lists:
+        print("{:.3f}".format(item), end=", ")
+    print("]")
+
+
 if __name__ == '__main__':
     tk, canvas = tkinterGUI.init_tkinter()
-
-    n = 20
-    all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
-    step = run_animation(all_sheep, sheep_dict, shepherd_a)
-    print("animation over!")
-    print(step)
+    steps = []
+    for n in range(10, 62, 2):
+        all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
+        step = run_animation(all_sheep, sheep_dict, shepherd_a)
+        steps.append(step)
+    print("AC animation over!")
+    print_list(steps)
     tk.mainloop()
