@@ -60,7 +60,7 @@ def print_list(lists):
 if __name__ == '__main__':
     tk, canvas = tkinterGUI.init_tkinter()
     steps = []
-    for n in range(10, 62, 2):
+    for n in range(60, 62, 2):
         all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
         step = run_animation(all_sheep, sheep_dict, shepherd_a)
         steps.append(step)
