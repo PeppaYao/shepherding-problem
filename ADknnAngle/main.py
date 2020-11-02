@@ -23,7 +23,7 @@ def init_sheep(canvas_local, n):
 def run_animation(all_sheep, sheep_dict, herd):
     step = 0
     target = np.array([560, 560])
-    r_dist = 300
+    r_dist = 250
     r_rep = 14
     speed = 2
     n = len(all_sheep)

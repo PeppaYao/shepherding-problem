@@ -58,11 +58,6 @@ def run_animation(all_sheep, sheep_dict, herd, green_index):
 
 
 def print_list(lists):
-    """
-    :param lists: list
-    :return: void
-    show list and retain three decimal places
-    """
     print("[", end="")
     for item in lists:
         print("{:.3f}".format(item), end=", ")

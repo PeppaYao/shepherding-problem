@@ -1,9 +1,9 @@
-from AEviewAngle import tkinterGUI
-from AEviewAngle import sheep
+from ANviewDistanceRs import tkinterGUI
+from ANviewDistanceRs import sheep
 import numpy as np
 import time
-from AEviewAngle import shepherdR
-from AEviewAngle import sheepR
+from ANviewDistanceRs import shepherdR
+from ANviewDistanceRs import sheepR
 
 
 def init_sheep(canvas_local, n):
@@ -20,10 +20,10 @@ def init_sheep(canvas_local, n):
     return np.array(X), agents, herd
 
 
-def run_animation(all_sheep, sheep_dict, herd):
+def run_animation(all_sheep, sheep_dict, herd, r_dist):
     step = 0
     target = np.array([560, 560])
-    r_dist = 250
+
     r_rep = 14
     speed = 2
     n = len(all_sheep)
@@ -36,11 +36,11 @@ def run_animation(all_sheep, sheep_dict, herd):
         else:
             print("collecting...")
             shepherdR.collecting(herd, all_sheep, speed)
-
         sheepR.sheep_move(herd_point, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector)
 
         tk.update()
         time.sleep(0.01)
+
         if shepherdR.is_all_in_target(all_sheep) or step > 4000:
             for per_sheep in sheep_dict.values():
                 per_sheep.delete()
@@ -59,11 +59,15 @@ def print_list(lists):
 
 if __name__ == '__main__':
     tk, canvas = tkinterGUI.init_tkinter()
-    steps = []
-    for n in range(10, 62, 2):
-        all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
-        step = run_animation(all_sheep, sheep_dict, shepherd_a)
-        steps.append(step)
-    print("AE_ animation over!")
-    print_list(steps)
+
+    step_array = []
+    for n in range(10, 65, 5):
+        steps = []
+        for r_dist in range(100, 360, 20):
+            all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
+            step = run_animation(all_sheep, sheep_dict, shepherd_a, r_dist)
+            steps.append(step)
+        step_array.append(steps)
+        print("AF animation over!")
+    print(step_array)
     tk.mainloop()
