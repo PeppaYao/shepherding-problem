@@ -42,9 +42,10 @@ if __name__ == '__main__':
     start = time.time()
     steps = []
     counts = []
-    n = 50
+    n = 100
     for k in range(5, n+5, 5):
         step, count = run_animation(n, k)
+        print(step, count)
         steps.append(step)
         counts.append(count)
     end = time.time()

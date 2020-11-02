@@ -63,10 +63,11 @@ if __name__ == '__main__':
     tk, canvas = tkinterGUI.init_tkinter()
     steps = []
     counts = []
-    n = 20
+    n = 70
     for k in range(5, n+5, 5):
         all_sheep, sheep_dict, herd = init_sheep(canvas, n)
         step, count = run_animation(all_sheep, sheep_dict, herd, k)
+        print(step, count)
         steps.append(step)
         counts.append(count)
     end = time.time()
