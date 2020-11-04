@@ -27,7 +27,8 @@
 - ACknnDistance 基于knn+distance
 - ADknnAngle 基于knn+angle
 - =============================
-- AFviewDistance 基于视距和最远距离
+- AEviewAngle 基于view+angle
+- AFviewDistance 基于view+distance
 - =============================
 - AJknnDistUnware 两类羊knn+distance+无意识
 - AKknnDistWare  两类羊knn+distance+有意识

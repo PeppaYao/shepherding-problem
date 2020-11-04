@@ -1,5 +1,6 @@
 import numpy as np
 from numpy import linalg as la
+from utils import common
 
 
 def collecting(herd, all_sheep, speed, app_dist):
@@ -7,7 +8,7 @@ def collecting(herd, all_sheep, speed, app_dist):
     herd_point = herd.position2point()
 
     g_mean = np.array([np.mean(all_sheep[:, 0]), np.mean(all_sheep[:, 1])])
-    far_a = find_farthest_sheep(all_sheep)
+    far_a = common.find_farthest_sheep(all_sheep)
 
     gt_dist_a = la.norm(far_a - g_mean)
     pc_a = (far_a - g_mean) / gt_dist_a * app_dist + far_a
@@ -31,25 +32,3 @@ def driving(herd, all_sheep, speed, target, app_dist):
     herd.x = rd[0]
     herd.y = rd[1]
     herd.draw()
-
-
-def find_farthest_sheep(my_sheep):
-
-    global_mean = np.array([np.mean(my_sheep[:, 0]), np.mean(my_sheep[:, 1])])
-    d = [np.linalg.norm(x - global_mean) for x in my_sheep]
-    return my_sheep[np.argmax(d)]
-
-
-def check(my_sheep, radius):
-    n = len(my_sheep)
-    global_mean = np.array([np.mean(my_sheep[:, 0]), np.mean(my_sheep[:, 1])])
-    d = [la.norm(sheep - global_mean) for sheep in my_sheep]
-    D = np.array(d)
-    return np.all(D <= radius)
-
-
-def is_all_in_target(my_sheep):
-    for p in my_sheep:
-        if p[0] < 455 or p[1] < 455:
-            return False
-    return True

@@ -1,5 +1,6 @@
 import numpy as np
 from numpy import linalg as la
+from utils import common
 
 
 def sheep_move(herd_a_pos, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector):
@@ -8,7 +9,7 @@ def sheep_move(herd_a_pos, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vec
     for i in range(n):
         per_sheep = sheep_dict['sheep' + str(i)].position2point()
         ps_dist = la.norm(per_sheep - herd_a_pos)
-        l_mean, ra = knn(per_sheep, all_sheep, n // 2 + 5, r_rep)
+        l_mean, ra = common.knn(per_sheep, all_sheep, n // 2 + 5, r_rep)
         if ps_dist > r_dist:
             H = np.random.uniform(-1, 1, size=2)
             H = H / la.norm(H)
@@ -32,15 +33,3 @@ def sheep_move(herd_a_pos, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vec
         all_sheep[i] = new_position[i] + per_sheep
 
 
-def knn(x, others, k, r_rep):
-    d = [np.linalg.norm(x - x_) for x_ in others]
-    near = np.argsort(d)
-    top = [others[v] for v in near[1:k + 1]]
-    t = np.array(top)
-    local_m = [np.mean(t[:, 0]), np.mean(t[:, 1])]
-    local_m = np.array(local_m, np.float32)
-    ra = np.zeros(2, dtype=np.float32)
-    for p in near[1:k + 1]:
-        if d[p] <= r_rep:
-            ra += (x - others[p]) / np.linalg.norm(x - others[p])
-    return local_m, ra

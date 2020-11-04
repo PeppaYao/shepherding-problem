@@ -3,7 +3,7 @@ from tkinter import *
 
 def init_tkinter():
     tk = Tk()
-    tk.title('AD')
+    tk.title('AC')
     tk.wm_attributes("-topmost", 1)
     Width = 600
     Height = 600
@@ -12,4 +12,3 @@ def init_tkinter():
     canvas.create_line(Height - 150, Height - 150, Height - 150, Height, Height - 150, Height - 150, Height, Height - 150)
     tk.update()
     return tk, canvas
-
