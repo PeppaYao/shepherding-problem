@@ -12,13 +12,13 @@ def sheep_move(herd_a_pos, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vec
         if ps_dist > r_dist:
             H = np.random.uniform(-1, 1, size=2)
             H = H / la.norm(H)
-            H = 0.1 * last_vector[i] + 1.2 * ra + 0.3 * H
+            H = 0.1 * last_vector[i] + 2 * ra + 0.5 * H
             H = H / la.norm(H)
         else:
             rs = (per_sheep - herd_a_pos) / ps_dist
             C = (l_mean - per_sheep) / la.norm(l_mean - per_sheep)
             e = np.random.uniform(-1, 1, size=2)
-            H = 0.1 * last_vector[i] + 1.05 * C + 1 * rs + 1.2 * ra + 0.3 * e / la.norm(e)
+            H = 0.1 * last_vector[i] + 1.05 * C + 1 * rs + 2 * ra + 0.3 * e / la.norm(e)
             H = H / la.norm(H)
             H = H * speed
 

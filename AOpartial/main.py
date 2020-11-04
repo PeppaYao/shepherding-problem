@@ -20,7 +20,7 @@ def init_sheep(canvas_local, n):
     return np.array(X, dtype=np.float64), agents, herd
 
 
-def run_animation(all_sheep, sheep_dict, herd, k):
+def run_animation(all_sheep, sheep_dict, herd):
     step = 0
     target = np.array([560, 560])
     r_dist = 250
@@ -28,7 +28,7 @@ def run_animation(all_sheep, sheep_dict, herd, k):
     speed = 2
     n = len(all_sheep)
     last_vector = np.zeros((n, 2), dtype=np.float32)
-    my_index = np.random.choice(np.arange(n), size=k, replace=False)
+    my_index = np.random.choice(np.arange(n), size=n//2, replace=False)
     my_array = all_sheep[my_index]
 
     while True:
@@ -48,6 +48,7 @@ def run_animation(all_sheep, sheep_dict, herd, k):
             herd.delete()
             break
         tk.update()
+
     return step, my_count
 
 
@@ -63,10 +64,9 @@ if __name__ == '__main__':
     tk, canvas = tkinterGUI.init_tkinter()
     steps = []
     counts = []
-    n = 70
-    for k in range(5, n+5, 5):
+    for n in range(10, 100, 5):
         all_sheep, sheep_dict, herd = init_sheep(canvas, n)
-        step, count = run_animation(all_sheep, sheep_dict, herd, k)
+        step, count = run_animation(all_sheep, sheep_dict, herd)
         print(step, count)
         steps.append(step)
         counts.append(count)
