@@ -4,7 +4,7 @@ from utils import sheep
 import numpy as np
 import time
 import math
-from ADknnAngle import shepherdR
+from MaxDistSum import shepherdR
 from ACknnDistance import sheepR
 
 
@@ -30,14 +30,14 @@ def run_animation(all_sheep, sheep_dict, herd):
     speed = 2
     n = len(all_sheep)
     app_dist = n + 50
-    radius = math.sqrt(n) * r_rep
+    theta = math.pi/6
     last_vector = np.zeros((n, 2), dtype=np.float32)
     while True:
         herd_point = herd.position2point().copy()
-        if common.check(all_sheep, radius):
+        if common.check_sector(all_sheep, theta, target):
             shepherdR.driving(herd, all_sheep, speed, target, app_dist)
         else:
-            shepherdR.collecting(herd, all_sheep, speed, app_dist)
+            shepherdR.collecting(herd, all_sheep, speed, app_dist, target)
 
         sheepR.sheep_move(herd_point, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector)
 
@@ -60,6 +60,6 @@ if __name__ == '__main__':
         all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
         step = run_animation(all_sheep, sheep_dict, shepherd_a)
         steps.append(step)
-    print("knn farthest angle animation over!")
+    print("max double distance animation over!")
     common.print_list(steps)
     tk.mainloop()

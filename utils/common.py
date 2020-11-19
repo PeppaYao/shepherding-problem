@@ -1,5 +1,6 @@
 import numpy as np
 from numpy import linalg as la
+import math
 
 
 def find_farthest_sheep(my_sheep):
@@ -76,3 +77,82 @@ def get_sheep_repulsion(cur_sheep, all_sheep, r_rep):
         if dist[i] <= r_rep and d > 1:
             repulsion += (cur_sheep - all_sheep[i]) / d
     return repulsion
+
+
+def inv(x, s):
+    epsilon = 1
+    return (x/s + epsilon)**(-2)
+
+
+def find_target_farthest_sheep(target, all_sheep):
+    d = [np.linalg.norm(x - target) for x in all_sheep]
+    return all_sheep[np.argmax(d)]
+
+
+def find_max_double_dist_sheep(target, all_sheep):
+    global_mean = np.array([np.mean(all_sheep[:, 0]), np.mean(all_sheep[:, 1])])
+    d = [la.norm(x - target) + la.norm(x - global_mean) for x in all_sheep]
+    return all_sheep[np.argmax(d)]
+
+
+def check_sector(all_sheep, theta, target):
+    g_mean = np.array([np.mean(all_sheep[:, 0]), np.mean(all_sheep[:, 1])])
+
+    d = [la.norm(sheep - target) for sheep in all_sheep]
+    dx = la.norm(g_mean - target)
+    OA = g_mean - target
+    OB = all_sheep - target
+    m = len(all_sheep)
+    t = np.array([OA.dot(OB[i, :]) / dx / d[i] for i in range(m)])
+
+    return all(t > math.cos(theta))
+
+
+def get_repulsive(cur_sheep, all_sheep, r_rep):
+    repulsion = np.zeros(2, dtype=np.float32)
+    n = len(all_sheep)
+    count_neighbor = 0
+    for i in range(n):
+        if all(all_sheep[i] == cur_sheep):
+            continue
+        d = la.norm(cur_sheep - all_sheep[i])
+        if r_rep >= d > 0.1:
+            repulsion += (cur_sheep - all_sheep[i]) / d * inv(d, 1)
+            count_neighbor += 1
+    return repulsion / count_neighbor if count_neighbor > 0 else repulsion
+
+
+def get_alignment(cur_sheep, all_sheep, r_dist):
+    alignment = np.zeros(2, dtype=np.float32)
+    n = len(all_sheep)
+    count_neighbor = 0
+    for i in range(n):
+        if all(all_sheep[i] == cur_sheep):
+            continue
+        d = la.norm(cur_sheep - all_sheep[i])
+        if r_dist >= d > 0.1:
+            alignment += (all_sheep[i]) / la.norm(all_sheep[i])
+            count_neighbor += 1
+    return alignment / count_neighbor if count_neighbor > 0 else alignment
+
+
+def get_attractive(cur_sheep, all_sheep, r_dist):
+    attractive = np.zeros(2, dtype=np.float32)
+    n = len(all_sheep)
+    count_neighbor = 0
+    for i in range(n):
+        if all(all_sheep[i] == cur_sheep):
+            continue
+        d = la.norm(all_sheep[i] - cur_sheep)
+        if r_dist >= d > 0.1:
+            attractive += (all_sheep[i] - cur_sheep) / d
+            count_neighbor += 1
+    return attractive / count_neighbor if count_neighbor > 0 else attractive
+
+
+def get_escape(herd_pos, cur_sheep, r_dist):
+    escape = np.zeros(2, dtype=np.float32)
+    d = la.norm(cur_sheep - herd_pos)
+    if r_dist >= d >= 0.1:
+        escape += (cur_sheep - herd_pos) / d * inv(d, 30)
+    return escape

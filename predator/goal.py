@@ -4,7 +4,7 @@ from utils import sheep
 import numpy as np
 import time
 import math
-from ADknnAngle import shepherdR
+from predator import shepherdR
 from ACknnDistance import sheepR
 
 
@@ -18,7 +18,7 @@ def init_sheep(canvas_local, n):
         X.append([x, y])
         agents['sheep' + str(i)] = sheep.Agent(canvas_local, x - 5, y - 5, x + 5, y + 5, 'green')
 
-    herd = sheep.Agent(canvas_local, 50, 550, 60, 560, 'red')
+    herd = sheep.Agent(canvas_local, 550, 550, 560, 560, 'red')
     return np.array(X), agents, herd
 
 
@@ -37,7 +37,7 @@ def run_animation(all_sheep, sheep_dict, herd):
         if common.check(all_sheep, radius):
             shepherdR.driving(herd, all_sheep, speed, target, app_dist)
         else:
-            shepherdR.collecting(herd, all_sheep, speed, app_dist)
+            shepherdR.collecting(herd, all_sheep, speed, app_dist, target)
 
         sheepR.sheep_move(herd_point, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector)
 
@@ -60,6 +60,6 @@ if __name__ == '__main__':
         all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
         step = run_animation(all_sheep, sheep_dict, shepherd_a)
         steps.append(step)
-    print("knn farthest angle animation over!")
+    print("goal animation over!")
     common.print_list(steps)
     tk.mainloop()

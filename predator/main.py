@@ -2,10 +2,9 @@ from utils import gui
 from utils import common
 from utils import sheep
 import numpy as np
-import time
-import math
-from ADknnAngle import shepherdR
-from ACknnDistance import sheepR
+from numpy import linalg as la
+from predator import predatorM
+from predator import sheepR
 
 
 def init_sheep(canvas_local, n):
@@ -18,36 +17,26 @@ def init_sheep(canvas_local, n):
         X.append([x, y])
         agents['sheep' + str(i)] = sheep.Agent(canvas_local, x - 5, y - 5, x + 5, y + 5, 'green')
 
-    herd = sheep.Agent(canvas_local, 50, 550, 60, 560, 'red')
+    herd = sheep.Agent(canvas_local, 550, 550, 560, 560, 'red')
     return np.array(X), agents, herd
 
 
-def run_animation(all_sheep, sheep_dict, herd):
+def run_animation(all_sheep, sheep_dict, pred):
     step = 0
-    target = np.array([600, 600])
     r_dist = 250
     r_rep = 14
     speed = 2
     n = len(all_sheep)
-    app_dist = n + 50
-    radius = math.sqrt(n) * r_rep
     last_vector = np.zeros((n, 2), dtype=np.float32)
+    g_mean = np.array([np.mean(all_sheep[:, 0]), np.mean(all_sheep[:, 1])])
+
     while True:
-        herd_point = herd.position2point().copy()
-        if common.check(all_sheep, radius):
-            shepherdR.driving(herd, all_sheep, speed, target, app_dist)
-        else:
-            shepherdR.collecting(herd, all_sheep, speed, app_dist)
-
+        herd_point = pred.position2point()
         sheepR.sheep_move(herd_point, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector)
-
+        predatorM.move(pred, g_mean, speed)
+        g_mean = np.array([np.mean(all_sheep[:, 0]), np.mean(all_sheep[:, 1])])
         tk.update()
-        time.sleep(0.01)
-
-        if common.is_all_in_target(all_sheep) or step > 4000:
-            for per_sheep in sheep_dict.values():
-                per_sheep.delete()
-            herd.delete()
+        if la.norm(g_mean - herd_point) < 6.0:
             break
         step += 1
     return step
@@ -56,10 +45,10 @@ def run_animation(all_sheep, sheep_dict, herd):
 if __name__ == '__main__':
     tk, canvas = gui.init_tkinter()
     steps = []
-    for n in range(2, 91):
+    for n in range(20, 21):
         all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
         step = run_animation(all_sheep, sheep_dict, shepherd_a)
         steps.append(step)
-    print("knn farthest angle animation over!")
+    print("AC animation over!")
     common.print_list(steps)
     tk.mainloop()
