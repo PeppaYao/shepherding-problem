@@ -61,8 +61,8 @@ if __name__ == '__main__':
     tk, canvas = gui.init_tkinter()
     steps = []
     n = 40
-    theta = math.pi/6
-    for k in [int(n*0.3), int(n*0.4), int(n*0.5), int(n*0.6), int(n*0.7), int(n*0.8)]:
+    theta = math.pi/4.5
+    for k in [int(n*0.1), int(n*0.2), int(n*0.3), int(n*0.4), int(n*0.5), int(n*0.6), int(n*0.7), int(n*0.8)]:
         all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
         step = run_animation(all_sheep, sheep_dict, shepherd_a, theta, k)
         steps.append(step)

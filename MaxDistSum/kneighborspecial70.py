@@ -56,13 +56,13 @@ def run_animation(all_sheep, sheep_dict, herd, theta, k):
 if __name__ == '__main__':
     """
     选择不同的角度：10, 20, 30, 40, 50, 60, 70
-    羊群规模设定为：40只
+    羊群规模设定为：70只
     """
     tk, canvas = gui.init_tkinter()
     steps = []
-    n = 40
-    theta = math.pi/6
-    for k in [int(n*0.3), int(n*0.4), int(n*0.5), int(n*0.6), int(n*0.7), int(n*0.8)]:
+    n = 70
+    theta = math.pi / 4.5
+    for k in range(1, n):
         all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
         step = run_animation(all_sheep, sheep_dict, shepherd_a, theta, k)
         steps.append(step)

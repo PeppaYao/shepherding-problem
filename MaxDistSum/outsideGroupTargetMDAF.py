@@ -5,24 +5,28 @@ import numpy as np
 import time
 import math
 from MaxDistSum import shepherdR
-from ACknnDistance import sheepR2
+from ACknnDistance import sheepR
 
 
 def init_sheep(canvas_local, n):
     agents = {}
     X = list()
-    for i in range(n):
+    for i in range(n-1):
         np.random.seed(i)
-        x = np.random.randint(50, 500)
-        y = np.random.randint(50, 500)
+        x = np.random.randint(100, 300)
+        y = np.random.randint(100, 300)
         X.append([x, y])
         agents['sheep' + str(i)] = sheep.Agent(canvas_local, x - 5, y - 5, x + 5, y + 5, 'green')
 
+    # 离群点的特殊的一只羊,在目标区域
+    X.append([550, 550])
+    agents['sheep' + str(n-1)] = sheep.Agent(canvas_local, 550 - 5, 550 - 5, 550 + 5, 550 + 5, 'green')
+    # 牧羊犬的初始位置
     herd = sheep.Agent(canvas_local, 50, 550, 60, 560, 'red')
     return np.array(X), agents, herd
 
 
-def run_animation(all_sheep, sheep_dict, herd, theta, k):
+def run_animation(all_sheep, sheep_dict, herd):
     step = 0
     target = np.array([600, 600])
     r_dist = 250
@@ -30,6 +34,7 @@ def run_animation(all_sheep, sheep_dict, herd, theta, k):
     speed = 2
     n = len(all_sheep)
     app_dist = n + 50
+    theta = math.pi/4.5
     fn = math.sqrt(n) * r_rep
     last_vector = np.zeros((n, 2), dtype=np.float32)
     while True:
@@ -39,12 +44,12 @@ def run_animation(all_sheep, sheep_dict, herd, theta, k):
         else:
             shepherdR.collecting(herd, all_sheep, speed, app_dist, target)
 
-        sheepR2.sheep_move(herd_point, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector, k)
+        sheepR.sheep_move(herd_point, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector)
 
         tk.update()
         time.sleep(0.01)
 
-        if common.is_all_in_target(all_sheep) or step > 2000:
+        if common.is_all_in_target(all_sheep) or step > 4000:
             for per_sheep in sheep_dict.values():
                 per_sheep.delete()
             herd.delete()
@@ -54,19 +59,10 @@ def run_animation(all_sheep, sheep_dict, herd, theta, k):
 
 
 if __name__ == '__main__':
-    """
-    选择不同的角度：10, 20, 30, 40, 50, 60, 70
-    羊群规模设定为：40只
-    """
     tk, canvas = gui.init_tkinter()
-    steps = []
-    n = 40
-    theta = math.pi/6
-    for k in [int(n*0.3), int(n*0.4), int(n*0.5), int(n*0.6), int(n*0.7), int(n*0.8)]:
-        all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
-        step = run_animation(all_sheep, sheep_dict, shepherd_a, theta, k)
-        steps.append(step)
-        print("current theta = {}, and step {}".format(k, step))
-    print("max double distance animation over!")
-    common.print_list(steps)
+    n = 50
+    all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
+    step = run_animation(all_sheep, sheep_dict, shepherd_a)
+    print(step)
+    print("MDAF animation over!")
     tk.mainloop()

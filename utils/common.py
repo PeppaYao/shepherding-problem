@@ -163,3 +163,9 @@ def check_dist(all_sheep, target, fn):
     d = [la.norm(sheep - target) for sheep in all_sheep]
     gcm2target = la.norm(g_mean - target)
     return all(d < gcm2target + fn)
+
+
+def calculate_dispersion(all_sheep):
+    g_mean = np.array([np.mean(all_sheep[:, 0]), np.mean(all_sheep[:, 1])])
+    d = [la.norm(sheep - g_mean)**2 for sheep in all_sheep]
+    return sum(d)/1.0/len(all_sheep)
