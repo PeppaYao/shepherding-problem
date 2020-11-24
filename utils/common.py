@@ -156,3 +156,10 @@ def get_escape(herd_pos, cur_sheep, r_dist):
     if r_dist >= d >= 0.1:
         escape += (cur_sheep - herd_pos) / d * inv(d, 30)
     return escape
+
+
+def check_dist(all_sheep, target, fn):
+    g_mean = np.array([np.mean(all_sheep[:, 0]), np.mean(all_sheep[:, 1])])
+    d = [la.norm(sheep - target) for sheep in all_sheep]
+    gcm2target = la.norm(g_mean - target)
+    return all(d < gcm2target + fn)
