@@ -49,6 +49,7 @@ def run_animation(all_sheep, sheep_dict, herd):
             for per_sheep in sheep_dict.values():
                 per_sheep.delete()
             herd.delete()
+            return common.calculate_dispersion(all_sheep)
             break
         step += 1
     return step

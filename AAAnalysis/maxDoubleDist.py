@@ -10,8 +10,8 @@ Y2 = np.array([531.000, 695.000, 788.000, 717.000, 894.000, 854.000, 831.000, 92
 # Y4 = np.array([])
 
 
-plt.plot(X, Y,  label="max distance sum of gcm and target")
-plt.plot(X, Y2,  label="max center distance")
+plt.plot(X, Y,  label="MDA")
+plt.plot(X, Y2,  label="SPPL")
 # plt.plot(X, Y3,  label="max center distance")
 
 plt.xlabel("the number of sheep")
