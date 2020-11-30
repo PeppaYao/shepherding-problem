@@ -13,13 +13,8 @@ def init_sheep(canvas_local, n):
     X = list()
     for i in range(n):
         np.random.seed(i)
-        if i % 2 == 0:
-            x = np.random.randint(150, 250)
-            y = np.random.randint(150, 250)
-
-        else:
-            x = np.random.randint(380, 480)
-            y = np.random.randint(380, 480)
+        x = 50 + np.random.randint(5) + 5 * i
+        y = 50 + np.random.randint(5) + 5 * i
         X.append([x, y])
         agents['sheep' + str(i)] = sheep.Agent(canvas_local, x - 5, y - 5, x + 5, y + 5, 'green')
 
@@ -62,7 +57,7 @@ def run_animation(all_sheep, sheep_dict, herd):
 
 if __name__ == '__main__':
     tk, canvas = gui.init_tkinter()
-    n = 70
+    n = 50
     all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
     step = run_animation(all_sheep, sheep_dict, shepherd_a)
     print(step)

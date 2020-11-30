@@ -4,7 +4,7 @@ from utils import sheep
 import numpy as np
 import time
 import math
-from MaxDistSum import shepherdR
+from ACknnDistance import shepherdR
 from ACknnDistance import sheepR
 
 
@@ -12,14 +12,8 @@ def init_sheep(canvas_local, n):
     agents = {}
     X = list()
     for i in range(n):
-        np.random.seed(i)
-        if i % 2 == 0:
-            x = np.random.randint(150, 250)
-            y = np.random.randint(150, 250)
-
-        else:
-            x = np.random.randint(380, 480)
-            y = np.random.randint(380, 480)
+        x = 50 + np.random.randint(5) + 5 * i
+        y = 50 + np.random.randint(5) + 5 * i
         X.append([x, y])
         agents['sheep' + str(i)] = sheep.Agent(canvas_local, x - 5, y - 5, x + 5, y + 5, 'green')
 
@@ -37,14 +31,14 @@ def run_animation(all_sheep, sheep_dict, herd):
     n = len(all_sheep)
     app_dist = n + 50
     theta = math.pi/4.5
-    fn = math.sqrt(n) * r_rep
+    radius = math.sqrt(n) * r_rep
     last_vector = np.zeros((n, 2), dtype=np.float32)
     while True:
         herd_point = herd.position2point().copy()
-        if common.check_sector(all_sheep, theta, target) and common.check_dist(all_sheep, target, fn):
+        if common.check(all_sheep, radius):
             shepherdR.driving(herd, all_sheep, speed, target, app_dist)
         else:
-            shepherdR.collecting(herd, all_sheep, speed, app_dist, target)
+            shepherdR.collecting(herd, all_sheep, speed, app_dist)
 
         sheepR.sheep_move(herd_point, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector)
 
@@ -61,10 +55,13 @@ def run_animation(all_sheep, sheep_dict, herd):
 
 
 if __name__ == '__main__':
+    """
+    改动n的值：50，60，70
+    """
     tk, canvas = gui.init_tkinter()
-    n = 70
+    n = 50
     all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
     step = run_animation(all_sheep, sheep_dict, shepherd_a)
     print(step)
-    print("MDAF animation over!")
+    print("SPPL animation over!")
     tk.mainloop()

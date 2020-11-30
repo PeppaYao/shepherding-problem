@@ -14,11 +14,12 @@ def init_sheep(canvas_local, n):
     for i in range(n):
         np.random.seed(i)
         if i % 2 == 0:
-            x = np.random.randint(50, 250)
-            y = np.random.randint(350, 550)
+            x = np.random.randint(150, 250)
+            y = np.random.randint(150, 250)
+
         else:
-            x = np.random.randint(350, 550)
-            y = np.random.randint(50, 250)
+            x = np.random.randint(380, 480)
+            y = np.random.randint(380, 480)
         X.append([x, y])
         agents['sheep' + str(i)] = sheep.Agent(canvas_local, x - 5, y - 5, x + 5, y + 5, 'green')
 

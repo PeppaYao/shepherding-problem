@@ -10,13 +10,13 @@ Y2 = np.array([531.000, 695.000, 788.000, 717.000, 894.000, 854.000, 831.000, 92
 # Y4 = np.array([])
 
 
-plt.plot(X, Y,  label="MDA")
+plt.plot(X, Y,  label="MDAF")
 plt.plot(X, Y2,  label="SPPL")
 # plt.plot(X, Y3,  label="max center distance")
 
 plt.xlabel("the number of sheep")
 plt.ylabel("total steps")
-plt.xticks(np.arange(0, 95, 5))
+plt.xticks(np.arange(0, 90, 10))
 plt.legend()
 plt.grid()
 plt.show()

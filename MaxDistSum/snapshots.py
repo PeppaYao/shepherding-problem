@@ -13,13 +13,8 @@ def init_sheep(canvas_local, n):
     X = list()
     for i in range(n):
         np.random.seed(i)
-        if i % 2 == 0:
-            x = np.random.randint(150, 250)
-            y = np.random.randint(150, 250)
-
-        else:
-            x = np.random.randint(380, 480)
-            y = np.random.randint(380, 480)
+        x = np.random.randint(50, 450)
+        y = np.random.randint(50, 450)
         X.append([x, y])
         agents['sheep' + str(i)] = sheep.Agent(canvas_local, x - 5, y - 5, x + 5, y + 5, 'green')
 
@@ -28,7 +23,7 @@ def init_sheep(canvas_local, n):
     return np.array(X), agents, herd
 
 
-def run_animation(all_sheep, sheep_dict, herd):
+def run_animation(all_sheep, sheep_dict, herd, canvas):
     step = 0
     target = np.array([600, 600])
     r_dist = 250
@@ -41,30 +36,54 @@ def run_animation(all_sheep, sheep_dict, herd):
     last_vector = np.zeros((n, 2), dtype=np.float32)
     while True:
         herd_point = herd.position2point().copy()
+        whichmode = ""
         if common.check_sector(all_sheep, theta, target) and common.check_dist(all_sheep, target, fn):
             shepherdR.driving(herd, all_sheep, speed, target, app_dist)
+            text = canvas.create_text(220, 20, text="driving", font=("宋体", 18))
+            whichmode = "driving"
+            canvas.pack()
         else:
             shepherdR.collecting(herd, all_sheep, speed, app_dist, target)
-
+            text = canvas.create_text(220, 20, text="collecting", font=("宋体", 18))
+            whichmode = "collecting"
+            canvas.pack()
+        step += 1
+        step_txt = canvas.create_text(420, 20, text="steps: {}/2000".format(step), font=("宋体", 18))
         sheepR.sheep_move(herd_point, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector)
-
         tk.update()
         time.sleep(0.01)
+        canvas.delete(text)
+        canvas.delete(step_txt)
+        if step == 500:
+            print("[", end="")
+            for per in all_sheep:
+                print("[{}, {}], ".format(per[0], per[1]), end="")
+            print("]")
+            print(herd.position2point())
+            print(whichmode)
+            break
 
         if common.is_all_in_target(all_sheep) or step > 4000:
+
+            print("[", end="")
+            for per in all_sheep:
+                print("[{}, {}], ".format(per[0], per[1]), end="")
+            print("]")
+            print(herd.position2point())
+            print(whichmode)
             for per_sheep in sheep_dict.values():
                 per_sheep.delete()
             herd.delete()
             break
-        step += 1
+
     return step
 
 
 if __name__ == '__main__':
     tk, canvas = gui.init_tkinter()
-    n = 70
+    n = 50
     all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
-    step = run_animation(all_sheep, sheep_dict, shepherd_a)
+    step = run_animation(all_sheep, sheep_dict, shepherd_a, canvas)
     print(step)
     print("MDAF animation over!")
     tk.mainloop()

@@ -12,17 +12,21 @@ Y5 = np.array([659.000, 670.000, 407.000, 439.000, 480.000, 444.000, 462.000, 40
 Y6 = np.array([522.000, 587.000, 432.000, 449.000, 563.000, 458.000, 480.000, 423.000, 408.000, 520.000, 424.000, 515.000, 348.000, 449.000, 511.000, 489.000, 397.000, 633.000, 496.000, 548.000, 575.000, 579.000, 536.000, 407.000, 489.000, 494.000, 423.000, 454.000, 507.000, 491.000, 577.000, 476.000, 564.000, 530.000, 504.000, 475.000, 466.000, 509.000, 510.000, 416.000, 523.000, 591.000, 514.000, 465.000, 451.000, 518.000, 438.000, 585.000, 586.000, 475.000, 488.000, 582.000, 565.000, 506.000, 583.000, 462.000, 526.000, 612.000, 511.000, 550.000, 502.000, 578.000, 507.000, 512.000, 534.000, 551.000, 552.000, 513.000, 608.000, 532.000, 529.000, 569.000, 580.000, 571.000, 516.000, 583.000, 544.000, 576.000, 544.000, 561.000, 539.000, 558.000, 574.000, 563.000, 577.000, 617.000, 601.000, 587.000, 607.000])
 
 
-plt.plot(X, Y,  label="MDA")
-plt.plot(X, Y2,  label="SPPL")
-plt.plot(X, Y6,  label="MDF")
-plt.plot(X, Y5,  label="MDAF")
+# # plt.plot(X, Y,  label="MDA")
+# plt.plot(X, Y2, 'g', label="SPPL")
+# # plt.plot(X, Y6,  label="MDF")
+# plt.plot(X, Y5, 'r', label="MDAF")
+#
+# # plt.plot(X, Y3,  label="max center distance")
+#
+# plt.xlabel("the number of sheep")
+# plt.ylabel("time steps")
+# plt.xticks(np.arange(0, 100, 10))
+# plt.legend()
+# plt.grid()
+# plt.show()
+# fig.savefig("E:\\我的坚果云\\latex\\doubleDistSum\\pics\\mixedSheep2to90.pdf", dpi=600, format='pdf')
 
-# plt.plot(X, Y3,  label="max center distance")
-
-plt.xlabel("the number of sheep")
-plt.ylabel("total steps")
-plt.xticks(np.arange(0, 95, 5))
-plt.legend()
-plt.grid()
-plt.show()
-fig.savefig("E:\\我的坚果云\\latex\\doubleDistSum\\pics\\mixedSheep2to90.pdf", dpi=600, format='pdf')
+a = np.mean(Y2)
+b = np.mean(Y5)
+print(a-b)
