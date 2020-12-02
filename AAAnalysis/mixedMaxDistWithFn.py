@@ -13,9 +13,9 @@ Y6 = np.array([522.000, 587.000, 432.000, 449.000, 563.000, 458.000, 480.000, 42
 
 
 # # plt.plot(X, Y,  label="MDA")
-plt.plot(X, Y2, 'silver', label="SPPL")
+plt.plot(X, Y2, 'darkcyan', label="SPPL")
 # # plt.plot(X, Y6,  label="MDF")
-plt.plot(X, Y5, 'darkcyan', label="MDAF")
+plt.plot(X, Y5, 'purple', label="MDAF")
 #
 # # plt.plot(X, Y3,  label="max center distance")
 
