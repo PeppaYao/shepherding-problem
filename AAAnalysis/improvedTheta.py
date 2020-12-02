@@ -18,9 +18,11 @@ plt.plot(X, Y3,  label="N=60")
 plt.plot(X, Y4,  label="N=70")
 
 
-plt.xlabel("Angle(degrees)")
-plt.ylabel("Time(steps)")
+plt.xlabel("degrees")
+plt.ylabel("time steps")
 plt.legend()
+plt.xlim(10, 65)
+plt.ylim(300, 700)
 plt.grid()
 plt.show()
 fig.savefig("E:\\我的坚果云\\latex\\doubleDistSum\\pics\\theta10to60_improved.pdf", dpi=600, format='pdf')

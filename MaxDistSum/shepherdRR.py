@@ -9,7 +9,8 @@ def collecting(herd, all_sheep, speed, app_dist, target):
     herd_point = herd.position2point()
 
     g_mean = np.array([np.mean(all_sheep[:, 0]), np.mean(all_sheep[:, 1])])
-    far_a = common.find_max_double_dist_sheep(target, all_sheep)
+    d = [la.norm(x - target) + la.norm(x - g_mean) for x in all_sheep]
+    far_a = all_sheep[np.argmax(d)]
 
     gt_dist_a = la.norm(far_a - g_mean)
     pc_a = (far_a - g_mean) / gt_dist_a * app_dist + far_a
@@ -19,6 +20,7 @@ def collecting(herd, all_sheep, speed, app_dist, target):
     herd.y = rd_a[1]
 
     herd.draw()
+    return np.argmax(d)
 
 
 def driving(herd, all_sheep, speed, target, app_dist):

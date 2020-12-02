@@ -4,7 +4,7 @@ from utils import sheep
 import numpy as np
 import time
 import math
-from MaxDistSum import shepherdR
+from MaxDistSum import shepherdRR
 from ACknnDistance import sheepR
 
 
@@ -13,8 +13,8 @@ def init_sheep(canvas_local, n):
     X = list()
     for i in range(n):
         np.random.seed(i)
-        x = np.random.randint(50, 450)
-        y = np.random.randint(50, 450)
+        x = np.random.randint(50, 550)
+        y = np.random.randint(50, 580)
         X.append([x, y])
         agents['sheep' + str(i)] = sheep.Agent(canvas_local, x - 5, y - 5, x + 5, y + 5, 'green')
 
@@ -25,25 +25,25 @@ def init_sheep(canvas_local, n):
 
 def run_animation(all_sheep, sheep_dict, herd, canvas):
     step = 0
-    target = np.array([600, 600])
+    target = np.array([550, 550])
     r_dist = 250
     r_rep = 14
     speed = 2
     n = len(all_sheep)
     app_dist = n + 50
-    theta = math.pi/4.5
+    theta = math.pi/6
     fn = math.sqrt(n) * r_rep
     last_vector = np.zeros((n, 2), dtype=np.float32)
     while True:
         herd_point = herd.position2point().copy()
         whichmode = ""
         if common.check_sector(all_sheep, theta, target) and common.check_dist(all_sheep, target, fn):
-            shepherdR.driving(herd, all_sheep, speed, target, app_dist)
+            shepherdRR.driving(herd, all_sheep, speed, target, app_dist)
             text = canvas.create_text(220, 20, text="driving", font=("宋体", 18))
             whichmode = "driving"
             canvas.pack()
         else:
-            shepherdR.collecting(herd, all_sheep, speed, app_dist, target)
+            idx = shepherdRR.collecting(herd, all_sheep, speed, app_dist, target)
             text = canvas.create_text(220, 20, text="collecting", font=("宋体", 18))
             whichmode = "collecting"
             canvas.pack()
@@ -54,12 +54,13 @@ def run_animation(all_sheep, sheep_dict, herd, canvas):
         time.sleep(0.01)
         canvas.delete(text)
         canvas.delete(step_txt)
-        if step == 500:
+        if step == 100:
             print("[", end="")
             for per in all_sheep:
                 print("[{}, {}], ".format(per[0], per[1]), end="")
             print("]")
             print(herd.position2point())
+            print(idx)
             print(whichmode)
             break
 
@@ -71,6 +72,7 @@ def run_animation(all_sheep, sheep_dict, herd, canvas):
             print("]")
             print(herd.position2point())
             print(whichmode)
+            print(idx)
             for per_sheep in sheep_dict.values():
                 per_sheep.delete()
             herd.delete()

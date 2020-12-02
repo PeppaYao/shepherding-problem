@@ -97,17 +97,19 @@ def run_animation(all_sheep, sheep_dict, herd):
     vv = np.array(VV)
 
     for i in range(n):
-        plt.plot(np.array(Px['coor' + str(i)]), 600 - np.array(Py['coor' + str(i)]), linewidth=0.1)
+        plt.plot(np.array(Px['coor' + str(i)]), 600 - np.array(Py['coor' + str(i)]), linewidth=0.1, c='silver')
 
-    plt.plot(xx, 600 - yy, 'g', label='shepherd', linewidth=3)
-    plt.plot(uu, 600 - vv, 'b-.', label='sheep center', linewidth=2)
+    plt.plot(xx, 600 - yy, c='darkkhaki', label='shepherd', linewidth=2)
+    plt.plot(uu, 600 - vv, '-.', c='darkcyan', label='sheep center', linewidth=2)
     plt.legend()
-    plt.show()
+
     y = np.arange(0, 600, 100)
     plt.xticks(y)
     plt.yticks(y)
-
-    fig.savefig('SPPL_trial40.pdf', dpi=600, format='pdf')
+    plt.xlabel("X Position")
+    plt.ylabel("Y Position")
+    plt.show()
+    fig.savefig('E:\\我的坚果云\\latex\\doubleDistSum\\pics\\SPPL_trial40.pdf', dpi=600, format='pdf')
 
     ## 输出距离
     print("dist_center:", dist_center)

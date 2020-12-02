@@ -13,20 +13,22 @@ Y6 = np.array([522.000, 587.000, 432.000, 449.000, 563.000, 458.000, 480.000, 42
 
 
 # # plt.plot(X, Y,  label="MDA")
-# plt.plot(X, Y2, 'g', label="SPPL")
+plt.plot(X, Y2, 'silver', label="SPPL")
 # # plt.plot(X, Y6,  label="MDF")
-# plt.plot(X, Y5, 'r', label="MDAF")
+plt.plot(X, Y5, 'darkcyan', label="MDAF")
 #
 # # plt.plot(X, Y3,  label="max center distance")
-#
-# plt.xlabel("the number of sheep")
-# plt.ylabel("time steps")
-# plt.xticks(np.arange(0, 100, 10))
-# plt.legend()
-# plt.grid()
-# plt.show()
-# fig.savefig("E:\\我的坚果云\\latex\\doubleDistSum\\pics\\mixedSheep2to90.pdf", dpi=600, format='pdf')
 
-a = np.mean(Y2)
-b = np.mean(Y5)
-print(a-b)
+plt.xlabel("the number of sheep")
+plt.ylabel("time steps")
+plt.xticks(np.arange(0, 100, 10))
+plt.legend()
+plt.xlim(0, 95)
+plt.ylim(0, 2000)
+plt.grid()
+plt.show()
+fig.savefig("E:\\我的坚果云\\latex\\doubleDistSum\\pics\\mixedSheep2to90.pdf", dpi=600, format='pdf')
+
+# a = np.mean(Y2)
+# b = np.mean(Y5)
+# print(a-b)
