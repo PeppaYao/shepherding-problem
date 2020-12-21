@@ -14,7 +14,7 @@ plt.plot(X, Y2, 'purple',   label="$N=60$")
 plt.plot(X, Y3,             label="$N=70$")
 
 
-plt.xlabel("the number of sheep")
+plt.xlabel("the view distance of sheep")
 plt.ylabel("time steps")
 plt.xticks(np.arange(100, 360, 20))
 plt.legend()

@@ -69,7 +69,7 @@ y2 = k2*x + b2
 ticks = np.arange(0, 700, 100)
 plt.scatter(sheep[:, 0], sheep[:, 1], c='g', label='sheep')
 plt.scatter(shepherd[0], shepherd[1], c='r', marker='p', label='shepherd')
-plt.scatter(sheep[idx][0], sheep[idx][1], c='b', label='outermost sheep')
+plt.scatter(sheep[idx][0], sheep[idx][1], c='b', label='target sheep')
 plt.scatter(g_mean[0], g_mean[1], marker='^', c='orange', label='center')
 line = np.array([[450, 0], [450, 150], [600, 150]])
 

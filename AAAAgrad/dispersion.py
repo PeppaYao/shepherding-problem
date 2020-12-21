@@ -3,9 +3,9 @@ from utils import common
 from utils import sheep
 import numpy as np
 import math
-from AAAAstrategy import shepherdR
-from AAAAstrategy import sheepR
-from AAAAstrategy import behaviors as cb
+from AAAAgrad import shepherdR
+from AAAAgrad import sheepR
+from AAAAgrad import behaviors as cb
 
 
 def init_sheep(canvas_local, n):
@@ -14,7 +14,7 @@ def init_sheep(canvas_local, n):
     for i in range(n):
         np.random.seed(i)
         x = np.random.randint(50, 550)
-        y = np.random.randint(50, 550)
+        y = np.random.randint(50, 580)
         X.append([x, y])
         agents['sheep' + str(i)] = sheep.Agent(canvas_local, x - 5, y - 5, x + 5, y + 5, 'green')
 
@@ -22,20 +22,21 @@ def init_sheep(canvas_local, n):
     return np.array(X, np.float64), agents, herd
 
 
-def run_animation(all_sheep, sheep_dict, herd, app_dist):
+def run_animation(all_sheep, sheep_dict, herd):
     step = 0
     target = np.array([550, 550], np.float64)
+    r_dist = 250
     r_rep = 14
     speed = 2
-    r_dist = 240
     n = len(all_sheep)
-    # app_dist = n + 50
+    app_dist = n + 50
     fn = math.sqrt(n) * r_rep
     last_vector = np.zeros((n, 2), dtype=np.float32)
     theta = math.pi / 6
     """设定新旧行为策略"""
-    herd_instance = shepherdR.Shepherd(cb.OldCBehavior())
+    # herd_instance = shepherdR.Shepherd(cb.OldCBehavior())
     # herd_instance = shepherdR.Shepherd(cb.NewCBehavior())
+    herd_instance = shepherdR.Shepherd(cb.MaxAngleCBehavior())
 
     while True:
         herd_point = herd.position2point().copy()
@@ -49,8 +50,6 @@ def run_animation(all_sheep, sheep_dict, herd, app_dist):
             text = canvas.create_text(220, 20, text="collecting", font=("宋体", 18))
             canvas.pack()
 
-        sheepR.sheep_move(herd_point, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector)
-
         step += 1
         step_txt = canvas.create_text(420, 20, text="steps: {}/2000".format(step), font=("宋体", 18))
         sheepR.sheep_move(herd_point, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector)
@@ -58,24 +57,22 @@ def run_animation(all_sheep, sheep_dict, herd, app_dist):
         canvas.delete(text)
         canvas.delete(step_txt)
 
-        if common.is_all_in_target(all_sheep) or step > 2000:
+        if common.is_all_in_target(all_sheep) or step > 4000:
             for per_sheep in sheep_dict.values():
                 per_sheep.delete()
             herd.delete()
             break
-
     return step
 
 
 if __name__ == '__main__':
     tk, canvas = gui.init_tkinter()
     steps = []
-    n = 40
-    for dist in range(10, 80, 10):
+    for n in range(40, 51):
         all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
-        step = run_animation(all_sheep, sheep_dict, shepherd_a, n+dist)
-        print("current {}, dist {}:".format(dist, step))
+        step = run_animation(all_sheep, sheep_dict, shepherd_a)
+        print("current n: {}, step {}:".format(n, step))
         steps.append(step)
-    print("knn farthest dist animation over!")
+    print("animation over!")
     common.print_list(steps)
     tk.mainloop()

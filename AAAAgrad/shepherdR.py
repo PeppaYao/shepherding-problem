@@ -13,7 +13,7 @@ class Shepherd:
 
         g_mean = np.array([np.mean(all_sheep[:, 0]), np.mean(all_sheep[:, 1])])
         """根据策略的不同产生多态的行为"""
-        far_a = self.behavior.find(all_sheep, target)
+        far_a = self.behavior.find(all_sheep, target, herd_point)
 
         gt_dist_a = la.norm(far_a - g_mean)
         pc_a = (far_a - g_mean) / gt_dist_a * app_dist + far_a
