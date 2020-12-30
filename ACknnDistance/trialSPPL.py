@@ -22,12 +22,12 @@ def init_sheep(canvas_local, n):
         agents['sheep' + str(i)] = sheep.Agent(canvas_local, x - 5, y - 5, x + 5, y + 5, 'green')
 
     herd = sheep.Agent(canvas_local, 50, 550, 60, 560, 'red')
-    return np.array(X), agents, herd
+    return np.array(X, np.float64), agents, herd
 
 
 def run_animation(all_sheep, sheep_dict, herd):
     step = 0
-    target = np.array([600, 600])
+    target = np.array([600, 600], np.float64)
     r_dist = 250
     r_rep = 14
     speed = 2
@@ -109,7 +109,7 @@ def run_animation(all_sheep, sheep_dict, herd):
     plt.xlabel("X Position")
     plt.ylabel("Y Position")
     plt.show()
-    fig.savefig('E:\\我的坚果云\\latex\\doubleDistSum\\pics\\SPPL_trial40.pdf', dpi=600, format='pdf')
+    fig.savefig('E:\\我的坚果云\\latex\\doubleDistSum\\pics\\SPPL_trial60.pdf', dpi=600, format='pdf')
 
     ## 输出距离
     print("dist_center:", dist_center)
@@ -120,7 +120,7 @@ def run_animation(all_sheep, sheep_dict, herd):
 if __name__ == '__main__':
     tk, canvas = gui.init_tkinter()
     steps = []
-    n = 40
+    n = 60
     all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
     step = run_animation(all_sheep, sheep_dict, shepherd_a)
     print(step)
