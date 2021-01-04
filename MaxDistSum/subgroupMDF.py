@@ -60,6 +60,10 @@ def run_animation(all_sheep, sheep_dict, herd):
 
 
 if __name__ == '__main__':
+    """
+    改动n的值：50，60，70
+    速度：聚集时2倍，驱赶时1倍。坐标为整型。
+    """
     tk, canvas = gui.init_tkinter()
     n = 70
     all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)

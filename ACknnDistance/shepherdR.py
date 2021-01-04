@@ -4,7 +4,7 @@ from utils import common
 
 
 def collecting(herd, all_sheep, speed, app_dist):
-    speeds = speed * 1.5
+    speeds = speed * 2
     herd_point = herd.position2point()
 
     g_mean = np.array([np.mean(all_sheep[:, 0]), np.mean(all_sheep[:, 1])])
