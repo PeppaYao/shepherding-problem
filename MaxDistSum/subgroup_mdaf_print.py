@@ -4,8 +4,10 @@ from utils import sheep
 import numpy as np
 import time
 import math
-from ACknnDistance import shepherdR
+from MaxDistSum import shepherdR
 from ACknnDistance import sheepR
+import matplotlib.pyplot as plt
+from numpy import linalg as la
 
 
 def init_sheep(canvas_local, n):
@@ -37,14 +39,33 @@ def run_animation(all_sheep, sheep_dict, herd):
     n = len(all_sheep)
     app_dist = n + 50
     theta = math.pi/4.5
-    radius = math.sqrt(n) * r_rep
+    fn = math.sqrt(n) * r_rep
     last_vector = np.zeros((n, 2), dtype=np.float32)
+    # 处理轨迹
+    UU = []
+    VV = []
+    XX = []
+    YY = []
+    Px = {}
+    Py = {}
+    for i in range(n):
+        Px['coor' + str(i)] = []
+        Py['coor' + str(i)] = []
+
+    for i in range(n):
+        Px['coor' + str(i)].append(all_sheep[i][0])
+        Py['coor' + str(i)].append(all_sheep[i][1])
+    dist_center = 0
+    dist_shepherd = 0
+    pre_mean = np.array([np.mean(all_sheep[:, 0]), np.mean(all_sheep[:, 1])])
+    pre_herd = herd.position2point()
+
     while True:
         herd_point = herd.position2point().copy()
-        if common.check(all_sheep, radius):
+        if common.check_sector(all_sheep, theta, target) and common.check_dist(all_sheep, target, fn):
             shepherdR.driving(herd, all_sheep, speed, target, app_dist)
         else:
-            shepherdR.collecting(herd, all_sheep, speed, app_dist)
+            shepherdR.collecting(herd, all_sheep, speed, app_dist, target)
 
         sheepR.sheep_move(herd_point, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector)
 
@@ -55,20 +76,39 @@ def run_animation(all_sheep, sheep_dict, herd):
             for per_sheep in sheep_dict.values():
                 per_sheep.delete()
             herd.delete()
+            print("dispersion: ", common.calculate_dispersion(all_sheep))
             break
+        # 处理轨迹
+        global_mean = np.array([np.mean(all_sheep[:, 0]), np.mean(all_sheep[:, 1])])
+        dist_center += la.norm(pre_mean - global_mean)
+        pre_mean = global_mean
+        dist_shepherd += la.norm(pre_herd - herd.position2point())
+        pre_herd = herd.position2point()
+        for i in range(n):
+            Px['coor' + str(i)].append(all_sheep[i][0])
+            Py['coor' + str(i)].append(all_sheep[i][1])
+        XX.append(herd.position2point()[0])
+        YY.append(herd.position2point()[1])
+        UU.append(global_mean[0])
+        VV.append(global_mean[1])
         step += 1
+    xx = np.array(XX)
+    yy = np.array(YY)
+
+    common.print_list(xx)
+    common.print_list(yy)
+
     return step
 
 
 if __name__ == '__main__':
     """
-    改动n的值：50，60，70
-    速度：聚集时2倍，驱赶时1倍。坐标为整型。
+    绘制带有起始羊群和轨迹的图
     """
     tk, canvas = gui.init_tkinter()
     n = 50
     all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
     step = run_animation(all_sheep, sheep_dict, shepherd_a)
     print(step)
-    print("SPPL animation over!")
+    print("MDAF animation over!")
     tk.mainloop()

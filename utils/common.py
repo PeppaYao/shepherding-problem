@@ -169,3 +169,23 @@ def calculate_dispersion(all_sheep):
     g_mean = np.array([np.mean(all_sheep[:, 0]), np.mean(all_sheep[:, 1])])
     d = [la.norm(sheep - g_mean)**2 for sheep in all_sheep]
     return sum(d)/1.0/len(all_sheep)
+
+
+def print_two_dimension_array(x):
+    print('[', end="")
+    i = 0
+    for item in x:
+        print('[', end="")
+        j = 0
+        for key in item:
+            print("{:.2f}".format(key), end="")
+            if j != len(item) - 1:
+                print(",", end="")
+            j += 1
+        if i != len(x) - 1:
+            print(']', end=",")
+        else:
+            print(']', end="")
+        i += 1
+    print(']', end="")
+    print()

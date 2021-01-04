@@ -6,23 +6,22 @@ import time
 import math
 from ACknnDistance import shepherdR
 from ACknnDistance import sheepR
+from numpy import linalg as la
 
 
 def init_sheep(canvas_local, n):
     agents = {}
     X = list()
-    for i in range(n):
+    for i in range(n-1):
         np.random.seed(i)
-        if i % 2 == 0:
-            x = np.random.randint(150, 250)
-            y = np.random.randint(150, 250)
-
-        else:
-            x = np.random.randint(380, 480)
-            y = np.random.randint(380, 480)
+        x = np.random.randint(100, 300)
+        y = np.random.randint(100, 300)
         X.append([x, y])
         agents['sheep' + str(i)] = sheep.Agent(canvas_local, x - 5, y - 5, x + 5, y + 5, 'green')
 
+    # 离群点的特殊的一只羊,在目标区域
+    X.append([550, 550])
+    agents['sheep' + str(n-1)] = sheep.Agent(canvas_local, 550 - 5, 550 - 5, 550 + 5, 550 + 5, 'green')
     # 牧羊犬的初始位置
     herd = sheep.Agent(canvas_local, 50, 550, 60, 560, 'red')
     return np.array(X), agents, herd
@@ -39,6 +38,24 @@ def run_animation(all_sheep, sheep_dict, herd):
     theta = math.pi/4.5
     radius = math.sqrt(n) * r_rep
     last_vector = np.zeros((n, 2), dtype=np.float32)
+    # 处理轨迹
+    UU = []
+    VV = []
+    XX = []
+    YY = []
+    Px = {}
+    Py = {}
+    for i in range(n):
+        Px['coor' + str(i)] = []
+        Py['coor' + str(i)] = []
+
+    for i in range(n):
+        Px['coor' + str(i)].append(all_sheep[i][0])
+        Py['coor' + str(i)].append(all_sheep[i][1])
+    dist_center = 0
+    dist_shepherd = 0
+    pre_mean = np.array([np.mean(all_sheep[:, 0]), np.mean(all_sheep[:, 1])])
+    pre_herd = herd.position2point()
     while True:
         herd_point = herd.position2point().copy()
         if common.check(all_sheep, radius):
@@ -55,8 +72,29 @@ def run_animation(all_sheep, sheep_dict, herd):
             for per_sheep in sheep_dict.values():
                 per_sheep.delete()
             herd.delete()
+            print("dispersion: ", common.calculate_dispersion(all_sheep))
             break
+        # 处理轨迹
+        global_mean = np.array([np.mean(all_sheep[:, 0]), np.mean(all_sheep[:, 1])])
+        dist_center += la.norm(pre_mean - global_mean)
+        pre_mean = global_mean
+        dist_shepherd += la.norm(pre_herd - herd.position2point())
+        pre_herd = herd.position2point()
+        for i in range(n):
+            Px['coor' + str(i)].append(all_sheep[i][0])
+            Py['coor' + str(i)].append(all_sheep[i][1])
+        XX.append(herd.position2point()[0])
+        YY.append(herd.position2point()[1])
+        UU.append(global_mean[0])
+        VV.append(global_mean[1])
         step += 1
+
+
+
+    xx = np.array(XX)
+    yy = np.array(YY)
+    common.print_list(xx)
+    common.print_list(yy)
     return step
 
 

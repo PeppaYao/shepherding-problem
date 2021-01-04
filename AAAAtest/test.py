@@ -6,6 +6,22 @@
 # a = np.mean(Y2)
 # b = np.mean(Y5)
 # print(a/b)
-
-a = 503-491 + 534 - 520
-print(a/3)
+import numpy as np
+x = np.array([[3, 4], [5, 6]])
+print('[', end="")
+i = 0
+for item in x:
+    print('[', end="")
+    j = 0
+    for key in item:
+        print("{:.2f}".format(key), end="")
+        if j != len(item)-1:
+            print(",", end="")
+        j += 1
+    if i != len(x) - 1:
+        print(']', end=",")
+    else:
+        print(']', end="")
+    i += 1
+print(']', end="")
+print()
