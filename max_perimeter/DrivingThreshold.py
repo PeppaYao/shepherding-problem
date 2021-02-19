@@ -4,7 +4,7 @@ from utils import sheep
 import numpy as np
 import time
 import math
-from knn_angle import shepherdR_DMAM as R
+from max_perimeter import shepherdR
 from knn_distance import sheepR
 
 
@@ -30,14 +30,15 @@ def run_animation(all_sheep, sheep_dict, herd):
     speed = 2
     n = len(all_sheep)
     app_dist = n + 50
-    radius = math.sqrt(n) * r_rep
+    theta = math.pi / 6
+    fn = math.sqrt(n) * r_rep
     last_vector = np.zeros((n, 2), dtype=np.float32)
     while True:
         herd_point = herd.position2point().copy()
-        if common.check(all_sheep, radius):
-            R.driving(herd, all_sheep, speed, target, app_dist)
+        if common.check_sector(all_sheep, theta, target) and common.check_dist(all_sheep, target, fn):
+            shepherdR.driving(herd, all_sheep, speed, target, app_dist)
         else:
-            R.collecting(herd, all_sheep, speed, app_dist, target)
+            shepherdR.collecting(herd, all_sheep, speed, app_dist, target)
 
         sheepR.sheep_move(herd_point, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector)
 
@@ -48,19 +49,24 @@ def run_animation(all_sheep, sheep_dict, herd):
             for per_sheep in sheep_dict.values():
                 per_sheep.delete()
             herd.delete()
+            return common.calculate_dispersion(all_sheep)
             break
         step += 1
     return step
 
 
 if __name__ == '__main__':
-    # 定向最大角度
+    """
+    数据范围：2-91只羊，角度30
+    特殊改进点：使用fn+夹角的机制
+    """
     tk, canvas = gui.init_tkinter()
     steps = []
-    for n in range(10, 101):
+    for n in range(2, 91):
         all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
         step = run_animation(all_sheep, sheep_dict, shepherd_a)
         steps.append(step)
-    print("定向最大角 animation over!")
+        print("current n = {}, and step {}".format(n, step))
+    print("max double distance animation over!")
     common.print_list(steps)
     tk.mainloop()

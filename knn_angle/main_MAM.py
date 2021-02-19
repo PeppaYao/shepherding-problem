@@ -54,12 +54,13 @@ def run_animation(all_sheep, sheep_dict, herd):
 
 
 if __name__ == '__main__':
+    # 随机最大角度
     tk, canvas = gui.init_tkinter()
     steps = []
-    for n in range(40, 41):
+    for n in range(10, 101):
         all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
         step = run_animation(all_sheep, sheep_dict, shepherd_a)
         steps.append(step)
-    print("knn farthest angle animation over!")
+    print("随机最大角度 animation over!")
     common.print_list(steps)
     tk.mainloop()

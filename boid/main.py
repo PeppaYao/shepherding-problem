@@ -2,10 +2,10 @@ from utils import gui
 from utils import common
 from utils import sheep
 import numpy as np
-import time
 import math
-from knn_angle import shepherdR_DMAM as R
-from knn_distance import sheepR
+import time
+from boid import shepherdR
+from boid import boid
 
 
 def init_sheep(canvas_local, n):
@@ -19,7 +19,7 @@ def init_sheep(canvas_local, n):
         agents['sheep' + str(i)] = sheep.Agent(canvas_local, x - 5, y - 5, x + 5, y + 5, 'green')
 
     herd = sheep.Agent(canvas_local, 50, 550, 60, 560, 'red')
-    return np.array(X), agents, herd
+    return np.array(X, dtype=np.float32), agents, herd
 
 
 def run_animation(all_sheep, sheep_dict, herd):
@@ -29,17 +29,16 @@ def run_animation(all_sheep, sheep_dict, herd):
     r_rep = 14
     speed = 2
     n = len(all_sheep)
-    app_dist = n + 50
+    app_dist = 50
     radius = math.sqrt(n) * r_rep
-    last_vector = np.zeros((n, 2), dtype=np.float32)
     while True:
         herd_point = herd.position2point().copy()
         if common.check(all_sheep, radius):
-            R.driving(herd, all_sheep, speed, target, app_dist)
+            shepherdR.driving(herd, all_sheep, speed, target, app_dist)
         else:
-            R.collecting(herd, all_sheep, speed, app_dist, target)
+            shepherdR.collecting(herd, all_sheep, speed, app_dist)
 
-        sheepR.sheep_move(herd_point, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector)
+        boid.sheep_move(herd_point, all_sheep, r_dist, r_rep, speed, sheep_dict)
 
         tk.update()
         time.sleep(0.01)
@@ -54,13 +53,12 @@ def run_animation(all_sheep, sheep_dict, herd):
 
 
 if __name__ == '__main__':
-    # 定向最大角度
     tk, canvas = gui.init_tkinter()
     steps = []
-    for n in range(10, 101):
+    for n in range(40, 41):
         all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
         step = run_animation(all_sheep, sheep_dict, shepherd_a)
         steps.append(step)
-    print("定向最大角 animation over!")
+    print("knn farthest dist animation over!")
     common.print_list(steps)
     tk.mainloop()
