@@ -62,7 +62,7 @@ if __name__ == '__main__':
     # 算法：两只都使用最远距离
     tk, canvas = gui.init_tkinter()
     steps = []
-    for n in range(20, 21):
+    for n in range(20, 71):
         all_sheep, sheep_dict, herd_a, herd_b = init_sheep(canvas, n)
         step = run_animation(all_sheep, sheep_dict, herd_a, herd_b)
         steps.append(step)

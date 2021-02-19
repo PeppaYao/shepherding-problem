@@ -4,8 +4,8 @@ from utils import sheep
 import numpy as np
 import time
 import math
-from ACknnDistance import shepherdR
-from ACknnDistance import sheepR
+from knn_angle import shepherdR_LMAM as R
+from knn_distance import sheepR
 
 
 def init_sheep(canvas_local, n):
@@ -35,9 +35,9 @@ def run_animation(all_sheep, sheep_dict, herd):
     while True:
         herd_point = herd.position2point().copy()
         if common.check(all_sheep, radius):
-            shepherdR.driving(herd, all_sheep, speed, target, app_dist)
+            R.driving(herd, all_sheep, speed, target, app_dist)
         else:
-            shepherdR.collecting(herd, all_sheep, speed, app_dist)
+            R.collecting(herd, all_sheep, speed, app_dist)
 
         sheepR.sheep_move(herd_point, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector)
 
@@ -48,20 +48,19 @@ def run_animation(all_sheep, sheep_dict, herd):
             for per_sheep in sheep_dict.values():
                 per_sheep.delete()
             herd.delete()
-            return common.calculate_dispersion(all_sheep)
             break
         step += 1
     return step
 
 
 if __name__ == '__main__':
+    # 顺时针最大角度
     tk, canvas = gui.init_tkinter()
     steps = []
-    for n in range(2, 91):
+    for n in range(40, 41):
         all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
         step = run_animation(all_sheep, sheep_dict, shepherd_a)
-        print("current {}, dispersion {}:".format(n, step))
         steps.append(step)
-    print("knn farthest dist animation over!")
     common.print_list(steps)
+    print("顺时针 animation over!")
     tk.mainloop()

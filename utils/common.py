@@ -46,6 +46,54 @@ def print_list(lists):
     print("]")
 
 
+def find_directed_max_angle_sheep(herd, center, all_sheep, target):
+    # 传过来的是牧羊犬的位置 和 中心坐标的位置
+    # 先计算羊的点是否在中心点的左边，若不是则cost设置为1
+    res = [np.cross((x - herd), (center - herd)) for x in all_sheep]
+    direct = np.cross((target - herd), (center - herd))
+
+    d = [math.sqrt(np.sum((x - herd) ** 2)) for x in all_sheep]
+    dx = math.sqrt(np.sum((center - herd) ** 2))
+    OA = center - herd
+    OB = all_sheep - herd  # 可以操作
+
+    m = len(all_sheep)
+    T = [OA.dot(OB[i, :]) / dx / d[i] for i in range(m)]
+    # 把同向的设置为1
+    for i in range(m):
+        if int(direct) > 0 and int(res[i]) < 0:
+            continue
+        elif int(direct) < 0 and int(res[i]) > 0:
+            continue
+        else:
+            T[i] = 1
+    far = np.argsort(T)
+    return all_sheep[far[0]]
+
+
+def find_r_max_angle_sheep(herd, center, all_sheep, direction):
+    # 传过来的是牧羊犬的位置 和 中心坐标的位置
+    # 先计算羊的点是否在中心点的左边，若不是则cost设置为1
+    # 传过来的是牧羊犬的位置和中心坐标的位置
+    # 先计算羊的点是否在中心点的左边，若不是则cost设置为1
+    res = [np.cross((x - herd), (center - herd)) for x in all_sheep]
+    d = [math.sqrt(np.sum((x - herd) ** 2)) for x in all_sheep]
+    dx = math.sqrt(np.sum((center - herd) ** 2))
+    OA = center - herd
+    OB = all_sheep - herd  # 可以操作
+    m = len(all_sheep)
+    T = [OA.dot(OB[i, :]) / dx / d[i] for i in range(m)]
+    for i in range(m):
+        if direction == 'clockwise':
+            if res[i] <= 0:
+                T[i] = 1
+        else:
+            if res[i] > 0:
+                T[i] = 1
+    far = np.argsort(T)
+    return all_sheep[far[0]]
+
+
 def find_max_angle_sheep(herd_point, all_sheep):
     g_mean = np.array([np.mean(all_sheep[:, 0]), np.mean(all_sheep[:, 1])])
     d = [la.norm(sheep - herd_point) for sheep in all_sheep]

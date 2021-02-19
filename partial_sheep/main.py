@@ -1,9 +1,9 @@
-from AOpartial import tkinterGUI
-from AOpartial import sheep
+from partial_sheep import tkinterGUI
+from partial_sheep import sheep
 import numpy as np
 import time
-from AOpartial import shepherdR
-from AOpartial import sheepR
+from partial_sheep import shepherdR
+from partial_sheep import sheepR
 
 
 def init_sheep(canvas_local, n):

@@ -5,7 +5,7 @@ import numpy as np
 import time
 import math
 from MaxDistSum import shepherdR
-from ACknnDistance import sheepR2
+from knn_distance import sheepR2
 
 
 def init_sheep(canvas_local, n):

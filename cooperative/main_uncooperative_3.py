@@ -59,10 +59,10 @@ def run_animation(all_sheep, sheep_dict, herd_a, herd_b):
 
 if __name__ == '__main__':
     # 不合作：两只独立的牧羊犬 独立地聚集和驱赶
-    # 算法：一只使用最远距离 一只使用最大角度
+    # 算法：一只使用最远距离 一只使用随机最大角度
     tk, canvas = gui.init_tkinter()
     steps = []
-    for n in range(50, 51):
+    for n in range(20, 71):
         all_sheep, sheep_dict, herd_a, herd_b = init_sheep(canvas, n)
         step = run_animation(all_sheep, sheep_dict, herd_a, herd_b)
         steps.append(step)

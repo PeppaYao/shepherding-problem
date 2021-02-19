@@ -4,8 +4,8 @@ from utils import sheep
 import numpy as np
 import time
 
-from ACknnDistance import shepherdR
-from ACknnDistance import sheepR
+from knn_distance import shepherdR
+from knn_distance import sheepR
 import matplotlib.pyplot as plt
 import math
 from numpy import linalg as la
