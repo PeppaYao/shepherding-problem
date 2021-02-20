@@ -4,18 +4,18 @@ from numpy import linalg as la
 
 
 def collecting(herd_a, herd_b, all_sheep, speed, app_dist, target):
-    # A-逆时针最大角
-    # B-定向最大角度
+    # A-最远
+    # B-最大周长
     speeds = speed * 1.5
     herd_point_a = herd_a.position2point()
     herd_point_b = herd_b.position2point()
 
     g_mean = np.array([np.mean(all_sheep[:, 0]), np.mean(all_sheep[:, 1])])
 
-    far_a = common.find_r_max_angle_sheep(herd_point_a, g_mean, all_sheep, 'anticlockwise')
+    far_a = common.find_farthest_sheep(all_sheep)
     gt_dist_a = la.norm(far_a - g_mean)
 
-    far_b = common.find_directed_max_angle_sheep(herd_point_b, g_mean, all_sheep, target)
+    far_b = common.find_max_double_dist_sheep(target, all_sheep)
     gt_dist_b = la.norm(far_b - g_mean)
 
     pc_a = (far_a - g_mean) / gt_dist_a * app_dist + far_a
