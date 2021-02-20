@@ -3,12 +3,12 @@ from numpy import linalg as la
 from utils import common
 
 
-def collecting(herd, all_sheep, speed, app_dist):
+def collecting(herd, all_sheep, speed, app_dist, target):
     speeds = speed * 1.5
     herd_point = herd.position2point()
 
     g_mean = np.array([np.mean(all_sheep[:, 0]), np.mean(all_sheep[:, 1])])
-    far_a = common.find_farthest_sheep(all_sheep)
+    far_a = common.find_directed_max_angle_sheep(herd_point, g_mean, all_sheep, target)
 
     gt_dist_a = la.norm(far_a - g_mean)
     pc_a = (far_a - g_mean) / gt_dist_a * app_dist + far_a

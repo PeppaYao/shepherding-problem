@@ -3,7 +3,8 @@ from utils import common
 from utils import sheep
 import numpy as np
 import time
-from cooperative import shepherdR_cooperative_pos_1 as R1
+import math
+from cooperative import shepherdR_cooperative_d as R1
 from cooperative import sheepR
 
 
@@ -32,13 +33,16 @@ def run_animation(all_sheep, sheep_dict, herd_a, herd_b):
     n = len(all_sheep)
     app_dist = n + 50
     last_vector = np.zeros((n, 2), dtype=np.float32)
-
+    radius = math.sqrt(n) * r_rep
     while True:
         herd_point_a = herd_a.position2point().copy()
         herd_point_b = herd_b.position2point().copy()
-        # A-最大周长
-        # B-方向性
-        R1.collecting(herd_a, all_sheep, speed, app_dist)
+        # A-聚集 + 驱赶
+        # B-驱赶
+        if common.check(all_sheep, radius):
+            R1.driving(herd_a, all_sheep, speed, target, app_dist)
+        else:
+            R1.collecting(herd_a, all_sheep, speed, app_dist, target)
         R1.driving(herd_b, all_sheep, speed, target, app_dist)
 
         sheepR.sheep_move(herd_point_a, herd_point_b, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector)
@@ -61,7 +65,7 @@ if __name__ == '__main__':
     # 聚集：最大角度
     tk, canvas = gui.init_tkinter()
     steps = []
-    for n in range(40, 41):
+    for n in range(20, 71):
         all_sheep, sheep_dict, herd_a, herd_b = init_sheep(canvas, n)
         step = run_animation(all_sheep, sheep_dict, herd_a, herd_b)
         steps.append(step)
