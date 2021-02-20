@@ -4,7 +4,7 @@ from utils import sheep
 import numpy as np
 import time
 import math
-from cooperative import shepherdR_cooperative_3 as R3
+from cooperative import shepherdR_cooperative_4 as R4
 from cooperative import sheepR
 
 
@@ -40,8 +40,8 @@ def run_animation(all_sheep, sheep_dict, herd_a, herd_b):
         herd_point_b = herd_b.position2point().copy()
         # A-collecting
         # B-driving
-        R3.collecting(herd_a, all_sheep, speed, app_dist, target)
-        R3.driving(herd_b, all_sheep, speed, target, app_dist)
+        R4.collecting(herd_a, all_sheep, speed, app_dist, target)
+        R4.driving(herd_b, all_sheep, speed, target, app_dist)
 
         sheepR.sheep_move(herd_point_a, herd_point_b, all_sheep, r_dist, r_rep, speed, sheep_dict, last_vector)
 
@@ -60,7 +60,7 @@ def run_animation(all_sheep, sheep_dict, herd_a, herd_b):
 
 if __name__ == '__main__':
     # 合作：一只专门聚集，一只专门驱赶。
-    # 聚集：方向性最大角
+    # 聚集：最大周长
     tk, canvas = gui.init_tkinter()
     steps = []
     for n in range(20, 71):
