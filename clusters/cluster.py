@@ -233,6 +233,7 @@ def collecting0(herd, array, g_mean):
 Xs = []
 Ys = []
 colors = ['green', 'blue', 'yellow', 'orange', 'pink', 'purple']
+# 寻找两个子群最小间隔距离
 for Nx in range(200, 260, 10):
     X = []
     agent = {}

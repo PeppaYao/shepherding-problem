@@ -1,9 +1,10 @@
-from knn_distance import tkinterGUI
-from knn_distance import sheep
+from utils import gui
+from utils import sheep
 import numpy as np
 import time
 import math
 from knn_angle import shepherdR_MAM
+from utils import common
 from knn_distance import sheepR
 
 
@@ -33,7 +34,7 @@ def run_animation(all_sheep, sheep_dict, herd):
     last_vector = np.zeros((n, 2), dtype=np.float32)
     while True:
         herd_point = herd.position2point().copy()
-        if shepherdR_MAM.check(all_sheep, radius):
+        if common.check(all_sheep, radius):
             shepherdR_MAM.driving(herd, all_sheep, speed, target, app_dist)
         else:
             shepherdR_MAM.collecting(herd, all_sheep, speed, app_dist)
@@ -43,7 +44,7 @@ def run_animation(all_sheep, sheep_dict, herd):
         tk.update()
         time.sleep(0.01)
 
-        if shepherdR_MAM.is_all_in_target(all_sheep) or step > 4000:
+        if common.is_all_in_target(all_sheep) or step > 4000:
             for per_sheep in sheep_dict.values():
                 per_sheep.delete()
             herd.delete()
@@ -60,9 +61,10 @@ def print_list(lists):
 
 
 if __name__ == '__main__':
-    tk, canvas = tkinterGUI.init_tkinter()
+    # 是什么功能呢 这个代码
+    tk, canvas = gui.init_tkinter()
     steps = []
-    for n in range(5, 55, 5):
+    for n in range(30, 35, 5):
         all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
         step = run_animation(all_sheep, sheep_dict, shepherd_a)
         steps.append(step)
