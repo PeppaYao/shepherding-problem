@@ -57,7 +57,7 @@ if __name__ == '__main__':
     # 逆时针最大角度
     tk, canvas = gui.init_tkinter()
     steps = []
-    for n in range(10, 101):
+    for n in range(50, 51):
         all_sheep, sheep_dict, shepherd_a = init_sheep(canvas, n)
         step = run_animation(all_sheep, sheep_dict, shepherd_a)
         steps.append(step)
